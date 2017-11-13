@@ -1,0 +1,26 @@
+{
+  "name": "volosyuk/simple-eloquent",
+  "description": "Adaptation of eloquent for retrieving its attributes",
+  "license": "MIT",
+  "keywords": ["laravel", "eloquent"],
+  "authors": [
+    {
+      "name": "Andrey Volosyuk",
+      "email": "valasiuk.andrei@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "illuminate/database": "5.4",
+    "illuminate/support": "5.4",
+    "illuminate/pagination": "5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Volosyuk\\SimpleEloquent\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.5@dev"
+  }
+}
