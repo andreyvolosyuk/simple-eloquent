@@ -48,4 +48,17 @@ class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasManyThro
 
         return $models;
     }
+
+    /**
+     * Set the constraints for an eager load of the relation.
+     *
+     * @param  array  $models
+     * @return void
+     */
+    public function addEagerConstraintsSimple(array $models)
+    {
+        $this->query->whereIn(
+            $this->getQualifiedFirstKeyName(), $this->getKeys($models, $this->localKey)
+        );
+    }
 }

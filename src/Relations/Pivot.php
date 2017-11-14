@@ -66,11 +66,11 @@ trait Pivot
         // models with the result of those columns as a separate model relation.
         $columns = $this->query->getQuery()->columns ? [] : $columns;
 
-        $select = $this->getSelectColumns($columns);
-
         $builder = $this->query->applyScopes();
 
-        $models = $builder->addSelect($select)->getSimpleModels();
+        $models = $builder->addSelect(
+            $this->shouldSelect($columns)
+        )->getSimpleModels();
 
         $this->hydrateSimplePivotRelation($models);
 

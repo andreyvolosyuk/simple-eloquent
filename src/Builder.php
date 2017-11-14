@@ -17,7 +17,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 {
     /**
      * @param array $columns
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getSimple($columns = ['*'])
     {
@@ -46,6 +46,32 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
         $this->query->where($this->model->getQualifiedKeyName(), '=', $id);
 
         return $this->firstSimple($columns);
+    }
+
+    /**
+     * Find a model by its primary key or throw an exception.
+     *
+     * @param  mixed  $id
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|Collection
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function findSimpleOrFail($id, $columns = ['*'])
+    {
+        $result = $this->findSimple($id, $columns);
+
+        if (is_array($id)) {
+            if (count($result) == count(array_unique($id))) {
+                return $result;
+            }
+        } elseif (! is_null($result)) {
+            return $result;
+        }
+
+        throw (new ModelNotFoundException)->setModel(
+            get_class($this->model), $id
+        );
     }
 
     /**
@@ -124,8 +150,6 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
             'pageName' => $pageName,
         ]);
     }
-
-
 
     /**
      * Get simple models without eager loading.

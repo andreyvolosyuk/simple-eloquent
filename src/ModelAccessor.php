@@ -83,7 +83,7 @@ class ModelAccessor
             return self::create(false);
         }
 
-        throw new Exception('Model has not valid type');
+        throw new Exception('Model type is not valid');
     }
 
     /**

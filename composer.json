@@ -20,6 +20,11 @@
       "Volosyuk\\SimpleEloquent\\": "src/"
     }
   },
+  "autoload-dev": {
+    "classmap": [
+      "tests/TestCase.php"
+    ]
+  },
   "require-dev": {
     "phpunit/phpunit": "^6.5@dev"
   }
