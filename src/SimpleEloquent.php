@@ -8,7 +8,9 @@ use Volosyuk\SimpleEloquent\Relations\HasRelationships;
 
 /**
  * Trait SimpleEloquent
+ *
  * @package Volosyuk\SimpleEloquent
+ * @authour Volosyuk Andrey <valasiuk.andrei@gmail.com>
  */
 trait SimpleEloquent
 {
