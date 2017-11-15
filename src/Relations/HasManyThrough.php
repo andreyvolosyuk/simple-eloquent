@@ -57,8 +57,8 @@ class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasManyThro
      */
     public function addEagerConstraintsSimple(array $models)
     {
-        $this->query->whereIn(
-            $this->getQualifiedFirstKeyName(), $this->getKeys($models, $this->localKey)
-        );
+        $table = $this->parent->getTable();
+
+        $this->query->whereIn($table.'.'.$this->firstKey, $this->getKeys($models, $this->localKey));
     }
 }

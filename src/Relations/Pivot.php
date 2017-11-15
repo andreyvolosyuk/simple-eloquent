@@ -60,17 +60,16 @@ trait Pivot
      */
     public function getSimple($columns = ['*'])
     {
-        /** @var Model $this */
         // First we'll add the proper select columns onto the query so it is run with
         // the proper columns. Then, we will get the results and hydrate out pivot
         // models with the result of those columns as a separate model relation.
         $columns = $this->query->getQuery()->columns ? [] : $columns;
 
+        $select = $this->getSelectColumns($columns);
+
         $builder = $this->query->applyScopes();
 
-        $models = $builder->addSelect(
-            $this->shouldSelect($columns)
-        )->getSimpleModels();
+        $models = $builder->addSelect($select)->getSimpleModels();
 
         $this->hydrateSimplePivotRelation($models);
 

@@ -11,9 +11,9 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "illuminate/database": "5.4",
-    "illuminate/support": "5.4",
-    "illuminate/pagination": "5.4"
+    "illuminate/support": "5.3.*",
+    "illuminate/database": "5.3.*",
+    "illuminate/pagination": "5.3.*"
   },
   "autoload": {
     "psr-4": {

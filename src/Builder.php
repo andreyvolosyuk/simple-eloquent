@@ -198,7 +198,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $models
      * @return array
      */
-    protected function eagerLoadRelationsSimple(array $models)
+    public function eagerLoadRelationsSimple(array $models)
     {
         foreach ($this->eagerLoad as $name => $constraints) {
             if (strpos($name, '.') === false) {

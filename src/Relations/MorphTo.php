@@ -57,16 +57,16 @@ class MorphTo extends \Illuminate\Database\Eloquent\Relations\MorphTo
          */
         $instance = $this->createModelByType($type);
 
+        $key = $instance->getTable().'.'.$instance->getKeyName();
+
         /**
          * @var Builder $query
          */
         $query = $this->replayMacros($instance->newQuery())
-            ->mergeConstraintsFrom($this->getQuery())
+            ->mergeModelDefinedRelationConstraints($this->getQuery())
             ->with($this->getQuery()->getEagerLoads());
 
-        return $query->whereIn(
-            $instance->getTable().'.'.$instance->getKeyName(), $this->gatherKeysByType($type)
-        )->getSimple();
+        return $query->whereIn($key, $this->gatherSimpleKeysByType($type)->all())->getSimple();
     }
 
     /**

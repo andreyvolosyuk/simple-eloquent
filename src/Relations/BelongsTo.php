@@ -2,7 +2,6 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Volosyuk\SimpleEloquent\ModelAccessor;
 
@@ -26,11 +25,7 @@ class BelongsTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         $foreign = $this->foreignKey;
 
-        /**
-         * @var Model $this
-         * @var  $other
-         */
-        $other = $this->ownerKey;
+        $other = $this->otherKey;
 
         $dictionary = [];
 
@@ -59,7 +54,7 @@ class BelongsTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
         // We'll grab the primary key name of the related models since it could be set to
         // a non-standard name and not "id". We will then construct the constraint for
         // our eagerly loading query so it returns the proper models from execution.
-        $key = $this->related->getTable().'.'.$this->ownerKey;
+        $key = $this->related->getTable().'.'.$this->otherKey;
 
         $this->query->whereIn($key, $this->getEagerModelKeysSimple($models));
     }
