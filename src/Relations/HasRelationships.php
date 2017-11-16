@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 /**
  * Include relations definitions to eloquent
+ *
  * @package Volosyuk\SimpleEloquent
  */
 trait HasRelationships
@@ -14,122 +15,120 @@ trait HasRelationships
     /**
      * Define an inverse one-to-one or many relationship.
      *
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  string  $relation
+     * @param  string $related
+     * @param  string $foreignKey
+     * @param  string $ownerKey
+     * @param  string $relation
      * @return BelongsTo
      */
-    public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null)
+    public function belongsTo($related, $foreignKey = null, $ownerKey = null, $relation = null)
     {
         if (is_null($relation)) {
-            list(, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-
-            $relation = $caller['function'];
+            $relation = $this->guessBelongsToRelation();
         }
+
+        $instance = $this->newRelatedInstance($related);
 
         if (is_null($foreignKey)) {
-            $foreignKey = Str::snake($relation) . '_id';
+            $foreignKey = Str::snake($relation).'_'.$instance->getKeyName();
         }
 
-        /**
-         * @var Model $instance
-         */
-        $instance = new $related;
+        $ownerKey = $ownerKey ?: $instance->getKeyName();
 
-        $query = $instance->newQuery();
-
-        $otherKey = $otherKey ?: $instance->getKeyName();
-
-        return new BelongsTo($query, $this, $foreignKey, $otherKey, $relation);
+        return new BelongsTo(
+            $instance->newQuery(), $this, $foreignKey, $ownerKey, $relation
+        );
     }
 
     /**
      * Define a many-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $table
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  string  $relation
+     * @param  string $related
+     * @param  string $table
+     * @param  string $foreignKey
+     * @param  string $relatedKey
+     * @param  string $relation
      * @return BelongsToMany
      */
-    public function belongsToMany($related, $table = null, $foreignKey = null, $otherKey = null, $relation = null)
+    public function belongsToMany($related, $table = null, $foreignKey = null, $relatedKey = null, $relation = null)
     {
+        /** @var Model $this */
+        // If no relationship name was passed, we will pull backtraces to get the
+        // name of the calling function. We will use that function name as the
+        // title of this relation since that is a great convention to apply.
         if (is_null($relation)) {
-            $relation = $this->getBelongsToManyCaller();
+            $relation = $this->guessBelongsToManyRelation();
         }
+
+        $instance = $this->newRelatedInstance($related);
 
         $foreignKey = $foreignKey ?: $this->getForeignKey();
 
-        /**
-         * @var Model $instance
-         */
-        $instance = new $related;
-
-        $otherKey = $otherKey ?: $instance->getForeignKey();
+        $relatedKey = $relatedKey ?: $instance->getForeignKey();
 
         if (is_null($table)) {
             $table = $this->joiningTable($related);
         }
 
-        $query = $instance->newQuery();
-
-        return new BelongsToMany($query, $this, $table, $foreignKey, $otherKey, $relation);
+        return new BelongsToMany(
+            $instance->newQuery(), $this, $table, $foreignKey, $relatedKey, $relation
+        );
     }
 
     /**
      * Define a one-to-one relationship.
      *
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $foreignKey
+     * @param  string $localKey
      * @return HasOne
      */
     public function hasOne($related, $foreignKey = null, $localKey = null)
     {
-        $foreignKey = $foreignKey ?: $this->getForeignKey();
-
         /**
          * @var Model $instance
          */
-        $instance = new $related;
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        return new HasOne($instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey);
+        return new HasOne($instance->newQuery(), $this, $instance->getTable().'.'.$foreignKey, $localKey);
     }
 
     /**
      * Define a one-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $foreignKey
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $foreignKey
+     * @param  string $localKey
      * @return HasMany
      */
     public function hasMany($related, $foreignKey = null, $localKey = null)
     {
-        $foreignKey = $foreignKey ?: $this->getForeignKey();
-
         /**
          * @var Model $instance
          */
-        $instance = new $related;
+        $instance = $this->newRelatedInstance($related);
+
+        $foreignKey = $foreignKey ?: $this->getForeignKey();
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $foreignKey, $localKey);
+        return new HasMany(
+            $instance->newQuery(), $this, $instance->getTable().'.'.$foreignKey, $localKey
+        );
     }
 
     /**
      * Define a has-many-through relationship.
      *
-     * @param  string  $related
-     * @param  string  $through
-     * @param  string|null  $firstKey
-     * @param  string|null  $secondKey
-     * @param  string|null  $localKey
+     * @param  string $related
+     * @param  string $through
+     * @param  string|null $firstKey
+     * @param  string|null $secondKey
+     * @param  string|null $localKey
      * @return HasManyThrough
      */
     public function hasManyThrough($related, $through, $firstKey = null, $secondKey = null, $localKey = null)
@@ -145,53 +144,40 @@ trait HasRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        return new HasManyThrough((new $related)->newQuery(), $this, $through, $firstKey, $secondKey, $localKey);
+        $instance = $this->newRelatedInstance($related);
+
+        return new HasManyThrough($instance->newQuery(), $this, $through, $firstKey, $secondKey, $localKey);
     }
 
     /**
      * Define a polymorphic, inverse one-to-one or many relationship.
      *
-     * @param  string  $name
-     * @param  string  $type
-     * @param  string  $id
+     * @param  string $name
+     * @param  string $type
+     * @param  string $id
      * @return MorphTo
      */
     public function morphTo($name = null, $type = null, $id = null)
     {
-        if (is_null($name)) {
-            list(, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        $name = $name ?: $this->guessBelongsToRelation();
 
-            $name = $caller['function'];
-        }
+        list($type, $id) = $this->getMorphs(
+            Str::snake($name), $type, $id
+        );
 
-        list($type, $id) = $this->getMorphs(Str::snake($name), $type, $id);
-
-        if (empty($class = $this->$type)) {
-            return new MorphTo(
-                $this->newQuery()->setEagerLoads([]), $this, $id, null, $type, $name
-            );
-        } else {
-            $class = $this->getActualClassNameForMorph($class);
-
-            /**
-             * @var Model $instance
-             */
-            $instance = new $class;
-
-            return new MorphTo(
-                $instance->newQuery(), $this, $id, $instance->getKeyName(), $type, $name
-            );
-        }
+        return empty($class = $this->{$type})
+            ? $this->morphEagerTo($name, $type, $id)
+            : $this->morphInstanceTo($class, $name, $type, $id);
     }
 
     /**
      * Define a polymorphic one-to-one relationship.
      *
-     * @param  string  $related
-     * @param  string  $name
-     * @param  string  $type
-     * @param  string  $id
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $name
+     * @param  string $type
+     * @param  string $id
+     * @param  string $localKey
      * @return MorphOne
      */
     public function morphOne($related, $name, $type = null, $id = null, $localKey = null)
@@ -199,7 +185,7 @@ trait HasRelationships
         /**
          * @var Model $instance
          */
-        $instance = new $related;
+        $instance = $this->newRelatedInstance($related);
 
         list($type, $id) = $this->getMorphs($name, $type, $id);
 
@@ -207,17 +193,17 @@ trait HasRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        return new MorphOne($instance->newQuery(), $this, $table . '.' . $type, $table . '.' . $id, $localKey);
+        return new MorphOne($instance->newQuery(), $this, $table.'.'.$type, $table.'.'.$id, $localKey);
     }
 
     /**
      * Define a polymorphic one-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $name
-     * @param  string  $type
-     * @param  string  $id
-     * @param  string  $localKey
+     * @param  string $related
+     * @param  string $name
+     * @param  string $type
+     * @param  string $id
+     * @param  string $localKey
      * @return MorphMany
      */
     public function morphMany($related, $name, $type = null, $id = null, $localKey = null)
@@ -225,7 +211,7 @@ trait HasRelationships
         /**
          * @var Model $instance
          */
-        $instance = new $related;
+        $instance = $this->newRelatedInstance($related);
 
         list($type, $id) = $this->getMorphs($name, $type, $id);
 
@@ -233,43 +219,73 @@ trait HasRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
-        return new MorphMany($instance->newQuery(), $this, $table . '.' . $type, $table . '.' . $id, $localKey);
+        return new MorphMany($instance->newQuery(), $this, $table.'.'.$type, $table.'.'.$id, $localKey);
     }
 
     /**
      * Define a polymorphic many-to-many relationship.
      *
-     * @param  string  $related
-     * @param  string  $name
-     * @param  string  $table
-     * @param  string  $foreignKey
-     * @param  string  $otherKey
-     * @param  bool  $inverse
+     * @param  string $related
+     * @param  string $name
+     * @param  string $table
+     * @param  string $foreignKey
+     * @param  string $relatedKey
+     * @param  bool $inverse
      * @return MorphToMany
      */
-    public function morphToMany($related, $name, $table = null, $foreignKey = null, $otherKey = null, $inverse = false)
+    public function morphToMany($related, $name, $table = null, $foreignKey = null, $relatedKey = null, $inverse = false)
     {
-        /**
-         * @var Model $caller
-         */
-        $caller = $this->getBelongsToManyCaller();
+        $caller = $this->guessBelongsToManyRelation();
 
-        $foreignKey = $foreignKey ?: $name . '_id';
+        $instance = $this->newRelatedInstance($related);
 
-        /**
-         * @var Model $instance
-         */
-        $instance = new $related;
+        $foreignKey = $foreignKey ?: $name.'_id';
 
-        $otherKey = $otherKey ?: $instance->getForeignKey();
-
-        $query = $instance->newQuery();
+        $relatedKey = $relatedKey ?: $instance->getForeignKey();
 
         $table = $table ?: Str::plural($name);
 
         return new MorphToMany(
-            $query, $this, $name, $table, $foreignKey,
-            $otherKey, $caller, $inverse
+            $instance->newQuery(), $this, $name, $table,
+            $foreignKey, $relatedKey, $caller, $inverse
+        );
+    }
+
+    /**
+     * Define a polymorphic, inverse one-to-one or many relationship.
+     *
+     * @param  string $name
+     * @param  string $type
+     * @param  string $id
+     * @return MorphTo
+     */
+    protected function morphEagerTo($name, $type, $id)
+    {
+        return new MorphTo(
+            $this->newQuery()->setEagerLoads([]), $this, $id, null, $type, $name
+        );
+    }
+
+    /**
+     * Define a polymorphic, inverse one-to-one or many relationship.
+     *
+     * @param  string $target
+     * @param  string $name
+     * @param  string $type
+     * @param  string $id
+     * @return MorphTo
+     */
+    protected function morphInstanceTo($target, $name, $type, $id)
+    {
+        /**
+         * @var Model $instance
+         */
+        $instance = $this->newRelatedInstance(
+            Model::getActualClassNameForMorph($target)
+        );
+
+        return new MorphTo(
+            $instance->newQuery(), $this, $id, $instance->getKeyName(), $type, $name
         );
     }
 }

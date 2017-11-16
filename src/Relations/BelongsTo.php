@@ -25,7 +25,7 @@ class BelongsTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         $foreign = $this->foreignKey;
 
-        $other = $this->otherKey;
+        $other = $this->ownerKey;
 
         $dictionary = [];
 
@@ -51,7 +51,7 @@ class BelongsTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function addEagerConstraintsSimple(array $models)
     {
-        $key = $this->related->getTable().'.'.$this->otherKey;
+        $key = $this->related->getTable().'.'.$this->ownerKey;
 
         $this->query->whereIn($key, $this->getEagerModelKeysSimple($models));
     }

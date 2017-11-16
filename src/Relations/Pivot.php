@@ -59,21 +59,20 @@ trait Pivot
     {
         $columns = $this->query->getQuery()->columns ? [] : $columns;
 
-        $select = $this->getSelectColumns($columns);
-
         $builder = $this->query->applyScopes();
 
-        $models = $builder->addSelect($select)->getSimpleModels();
+        $models = $builder->addSelect(
+            $this->shouldSelect($columns)
+        )->getSimpleModels();
 
         $this->hydrateSimplePivotRelation($models);
 
         if (count($models) > 0) {
-            $models = $builder->eagerLoadRelationsSimple($models);
+            $models = $builder->eagerLoadRelations($models);
         }
 
         return $this->related->newCollection($models);
     }
-
 
     /**
      * Hydrate the pivot table relationship on the models.
@@ -95,16 +94,13 @@ trait Pivot
      * Get the pivot attributes from a model.
      *
      * @param  stdClass|array  $model
-     * @return array|stdClass
+     * @return array
      */
     protected function cleanSimplePivotAttributes(&$model)
     {
         $values = ModelAccessor::createBasedOnModel($model);
 
         foreach ($model as $key => &$value) {
-            // To get the pivots attributes we will just take any of the attributes which
-            // begin with "pivot_" and add those to this arrays, as well as unsetting
-            // them from the parent's models since they exist in a different table.
             if (strpos($key, 'pivot_') === 0) {
                 ModelAccessor::set($values, substr($key, 6), $value);
 

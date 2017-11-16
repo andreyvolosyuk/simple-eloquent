@@ -76,6 +76,6 @@ trait Relation
      */
     public function addEagerConstraintsSimple(array $models)
     {
-        $this->query->whereIn($this->getForeignKey(), $this->getKeys($models));
+        $this->query->whereIn($this->getQualifiedForeignKeyName(), $this->getKeys($models));
     }
 }
