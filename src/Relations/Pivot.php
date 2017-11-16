@@ -68,7 +68,7 @@ trait Pivot
         $this->hydrateSimplePivotRelation($models);
 
         if (count($models) > 0) {
-            $models = $builder->eagerLoadRelations($models);
+            $models = $builder->eagerLoadRelationsSimple($models);
         }
 
         return $this->related->newCollection($models);

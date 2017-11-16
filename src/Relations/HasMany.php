@@ -24,7 +24,7 @@ class HasMany extends \Illuminate\Database\Eloquent\Relations\HasMany
     {
         $dictionary = [];
 
-        $foreign = $this->getPlainForeignKey();
+        $foreign = $this->getForeignKeyName();
 
         foreach ($results as $result) {
             $dictionary[ModelAccessor::get($result, $foreign)][] = $result;

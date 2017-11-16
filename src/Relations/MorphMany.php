@@ -39,7 +39,7 @@ class MorphMany extends \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         $dictionary = [];
 
-        $foreign = $this->getPlainForeignKey();
+        $foreign = $this->getForeignKeyName();
 
         foreach ($results as $result) {
             $dictionary[ModelAccessor::get($result, $foreign)][] = $result;
