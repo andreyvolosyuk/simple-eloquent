@@ -9,7 +9,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
 
 /**
  * Class MorphToWithSimple
- * @package App\Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class MorphTo extends \Illuminate\Database\Eloquent\Relations\MorphTo
 {
@@ -52,7 +52,6 @@ class MorphTo extends \Illuminate\Database\Eloquent\Relations\MorphTo
     protected function getSimpleResultsByType($type)
     {
         /**
-         * @var Model $this
          * @var Model $instance
          */
         $instance = $this->createModelByType($type);

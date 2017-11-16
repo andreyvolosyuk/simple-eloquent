@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class HasOneWithSimple
- * @package app\Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class HasOne extends \Illuminate\Database\Eloquent\Relations\HasOne
 {

@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class MorphOneWithSimple
- * @package App\Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class MorphOne extends \Illuminate\Database\Eloquent\Relations\MorphOne
 {

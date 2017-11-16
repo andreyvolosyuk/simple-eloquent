@@ -4,6 +4,7 @@ namespace Volosyuk\SimpleEloquent\Relations;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use stdClass;
 use Volosyuk\SimpleEloquent\Builder;
 use Volosyuk\SimpleEloquent\ModelAccessor;
 
@@ -31,7 +32,7 @@ trait Relation
     /**
      * @param array $models
      * @param $relation
-     * @return array
+     * @return array|stdClass[]
      */
     public function initSimpleRelation(array &$models, $relation)
     {

@@ -4,7 +4,7 @@ namespace Volosyuk\SimpleEloquent\Relations;
 
 /**
  * Class MorphToManyWithSimple
- * @package App\Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class MorphToMany extends \Illuminate\Database\Eloquent\Relations\MorphToMany
 {

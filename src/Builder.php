@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use stdClass;
 use Volosyuk\SimpleEloquent\Relations\Relation;
 
 /**
  * Class Builder
- * @package Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class Builder extends \Illuminate\Database\Eloquent\Builder
 {
@@ -35,7 +36,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param mixed $id
      * @param array $columns
-     * @return Collection|\Illuminate\Database\Eloquent\Model|null|static
+     * @return Collection|stdClass|array|null
      */
     public function findSimple($id, $columns = ['*'])
     {
@@ -53,7 +54,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      *
      * @param  mixed  $id
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model|Collection
+     * @return stdClass|array|Collection
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -78,7 +79,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * Execute the query and get the first result.
      *
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model|static|null
+     * @return stdClass|array|null
      */
     public function firstSimple($columns = ['*'])
     {
@@ -89,7 +90,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * Execute the query and get the first result or throw an exception.
      *
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model|static
+     * @return array|stdClass
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
@@ -155,7 +156,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * Get simple models without eager loading.
      *
      * @param  array  $columns
-     * @return \Illuminate\Database\Eloquent\Model[]
+     * @return stdClass[]|array
      */
     public function getSimpleModels($columns = ['*'])
     {
@@ -172,12 +173,6 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      */
     protected function loadSimpleRelation(array $models, $name, Closure $constraints)
     {
-        /**
-         * First we will "back up" the existing where conditions on the query so we can
-         * add our eager constraints. Then we will merge the wheres that were on the
-         * query back to it in order that any where conditions might be specified.
-         * @var Relation|\Illuminate\Database\Eloquent\Relations\Relation $relation
-         */
         $relation = $this->getRelation($name);
 
         $relation->addEagerConstraintsSimple($models);
@@ -186,9 +181,6 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 
         $models = $relation->initSimpleRelation($models, $name);
 
-        // Once we have the results, we just match those back up to their parent models
-        // using the relationship instance. Then we just return the finished arrays
-        // of models which have been eagerly hydrated and are readied for return.
         return $relation->eagerLoadAndMatchSimple($models, $name);
     }
 

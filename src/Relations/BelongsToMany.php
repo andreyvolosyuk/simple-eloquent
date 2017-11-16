@@ -4,7 +4,7 @@ namespace Volosyuk\SimpleEloquent\Relations;
 
 /**
  * Class BelongsToManyWithSimple
- * @package Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
 {

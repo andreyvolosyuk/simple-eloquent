@@ -4,6 +4,7 @@ namespace Volosyuk\SimpleEloquent;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use stdClass;
 use Volosyuk\SimpleEloquent\Relations\HasRelationships;
 
 /**
@@ -31,7 +32,7 @@ trait SimpleEloquent
      * Get all of the models from the database.
      *
      * @param  array|mixed  $columns
-     * @return Collection|static[]
+     * @return Collection|stdClass[]|array
      */
     public static function allSimple($columns = ['*'])
     {

@@ -6,8 +6,10 @@ use Exception;
 use stdClass;
 
 /**
+ * Perform simple operations with models depends on their type
+ *
  * Class ModelAccessor
- * @package App\Eloomi
+ * @package Volosyuk\SimpleEloquent
  */
 class ModelAccessor
 {
