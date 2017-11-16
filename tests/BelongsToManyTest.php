@@ -13,6 +13,7 @@ class BelongsToManyTest extends TestCase
             'id' => 10,
             'name' => 'Test article'
         ]);
+
         $article->multipleCategories()->attach($category->id);
 
         $this->assertEquals(

@@ -43,35 +43,36 @@ trait HasRelationships
     /**
      * Define a many-to-many relationship.
      *
-     * @param  string $related
-     * @param  string $table
-     * @param  string $foreignKey
-     * @param  string $relatedKey
-     * @param  string $relation
+     * @param  string  $related
+     * @param  string  $table
+     * @param  string  $foreignPivotKey
+     * @param  string  $relatedPivotKey
+     * @param  string  $parentKey
+     * @param  string  $relatedKey
+     * @param  string  $relation
      * @return BelongsToMany
      */
-    public function belongsToMany($related, $table = null, $foreignKey = null, $relatedKey = null, $relation = null)
+    public function belongsToMany($related, $table = null, $foreignPivotKey = null, $relatedPivotKey = null,
+                                  $parentKey = null, $relatedKey = null, $relation = null)
     {
-        /** @var Model $this */
-        // If no relationship name was passed, we will pull backtraces to get the
-        // name of the calling function. We will use that function name as the
-        // title of this relation since that is a great convention to apply.
         if (is_null($relation)) {
             $relation = $this->guessBelongsToManyRelation();
         }
 
         $instance = $this->newRelatedInstance($related);
 
-        $foreignKey = $foreignKey ?: $this->getForeignKey();
+        $foreignPivotKey = $foreignPivotKey ?: $this->getForeignKey();
 
-        $relatedKey = $relatedKey ?: $instance->getForeignKey();
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
 
         if (is_null($table)) {
             $table = $this->joiningTable($related);
         }
 
         return new BelongsToMany(
-            $instance->newQuery(), $this, $table, $foreignKey, $relatedKey, $relation
+            $instance->newQuery(), $this, $table, $foreignPivotKey,
+            $relatedPivotKey, $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(), $relation
         );
     }
 
@@ -131,7 +132,7 @@ trait HasRelationships
      * @param  string|null $localKey
      * @return HasManyThrough
      */
-    public function hasManyThrough($related, $through, $firstKey = null, $secondKey = null, $localKey = null)
+    public function hasManyThrough($related, $through, $firstKey = null, $secondKey = null, $localKey = null, $secondLocalKey = null)
     {
         /**
          * @var Model $through
@@ -144,9 +145,11 @@ trait HasRelationships
 
         $localKey = $localKey ?: $this->getKeyName();
 
+        $secondLocalKey = $secondLocalKey ?: $through->getKeyName();
+
         $instance = $this->newRelatedInstance($related);
 
-        return new HasManyThrough($instance->newQuery(), $this, $through, $firstKey, $secondKey, $localKey);
+        return new HasManyThrough($instance->newQuery(), $this, $through, $firstKey, $secondKey, $localKey, $secondLocalKey);
     }
 
     /**
@@ -225,29 +228,34 @@ trait HasRelationships
     /**
      * Define a polymorphic many-to-many relationship.
      *
-     * @param  string $related
-     * @param  string $name
-     * @param  string $table
-     * @param  string $foreignKey
-     * @param  string $relatedKey
-     * @param  bool $inverse
+     * @param  string  $related
+     * @param  string  $name
+     * @param  string  $table
+     * @param  string  $foreignPivotKey
+     * @param  string  $relatedPivotKey
+     * @param  string  $parentKey
+     * @param  string  $relatedKey
+     * @param  bool  $inverse
      * @return MorphToMany
      */
-    public function morphToMany($related, $name, $table = null, $foreignKey = null, $relatedKey = null, $inverse = false)
+    public function morphToMany($related, $name, $table = null, $foreignPivotKey = null,
+                                $relatedPivotKey = null, $parentKey = null,
+                                $relatedKey = null, $inverse = false)
     {
         $caller = $this->guessBelongsToManyRelation();
 
         $instance = $this->newRelatedInstance($related);
 
-        $foreignKey = $foreignKey ?: $name.'_id';
+        $foreignPivotKey = $foreignPivotKey ?: $name.'_id';
 
-        $relatedKey = $relatedKey ?: $instance->getForeignKey();
+        $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
 
         $table = $table ?: Str::plural($name);
 
         return new MorphToMany(
             $instance->newQuery(), $this, $name, $table,
-            $foreignKey, $relatedKey, $caller, $inverse
+            $foreignPivotKey, $relatedPivotKey, $parentKey ?: $this->getKeyName(),
+            $relatedKey ?: $instance->getKeyName(), $caller, $inverse
         );
     }
 

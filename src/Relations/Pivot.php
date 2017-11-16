@@ -27,7 +27,7 @@ trait Pivot
      */
     public function matchSimple(array &$models, Collection $results, $relation)
     {
-        $foreign = $this->foreignKey;
+        $foreign = $this->foreignPivotKey;
 
         $dictionary = [];
 
