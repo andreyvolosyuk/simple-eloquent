@@ -6,6 +6,9 @@ class HasManyThroughTest extends TestCase
     {
         $category = Category::create(['name' => 'Test category']);
         $article = Article::create(['title' => 'Test article', 'category_id' => $category->id]);
+
+        $this->assertCount(0, Category::with('comments')->firstSimple()->comments);
+
         Comment::insert([
             ['body' => 'first comment', 'article_id' => $article->id],
             ['body' => 'second comment', 'article_id' => $article->id],

@@ -7,6 +7,9 @@ class HasManyTest extends TestCase
         $category = Category::create([
             'name' => 'Test category'
         ]);
+
+        $this->assertCount(0, Category::with('articles')->firstSimple()->articles);
+
         Article::create([
             'title' => 'Test article',
             'category_id' => $category->id
