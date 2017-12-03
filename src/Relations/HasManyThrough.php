@@ -33,11 +33,13 @@ class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasManyThro
         }
 
         foreach ($models as &$model) {
-            $key = ModelAccessor::get($model, $this->parent->getKeyName());
+            $value = [];
 
-            if (isset($dictionary[$key])) {
-                ModelAccessor::set($model, $relation, Collection::make($dictionary[$key]));
+            if (isset($dictionary[$key = ModelAccessor::get($model, $this->parent->getKeyName())])) {
+                $value = $dictionary[$key];
             }
+
+            ModelAccessor::set($model, $relation, Collection::make($value));
         }
         unset($model);
 

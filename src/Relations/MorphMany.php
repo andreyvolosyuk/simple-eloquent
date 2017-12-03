@@ -46,13 +46,13 @@ class MorphMany extends \Illuminate\Database\Eloquent\Relations\MorphMany
         }
 
         foreach ($models as &$model) {
-            $key = ModelAccessor::get($model, $this->localKey);
+            $value = Collection::make();
 
-            if (isset($dictionary[$key])) {
+            if (isset($dictionary[$key = ModelAccessor::get($model, $this->localKey)])) {
                 $value = $this->getRelationValue($dictionary, $key, $type);
-
-                ModelAccessor::set($model, $relation, $value);
             }
+
+            ModelAccessor::set($model, $relation, $value);
         }
 
         return $models;

@@ -31,13 +31,13 @@ class HasMany extends \Illuminate\Database\Eloquent\Relations\HasMany
         }
 
         foreach ($models as &$model) {
-            $key = ModelAccessor::get($model, $this->localKey);
+            $value = [];
 
-            if (isset($dictionary[$key])) {
+            if (isset($dictionary[$key = ModelAccessor::get($model, $this->localKey)])) {
                 $value = $dictionary[$key];
-
-                ModelAccessor::set($model, $relation, Collection::make($value));
             }
+
+            ModelAccessor::set($model, $relation, Collection::make($value));
         }
         unset($model);
 
