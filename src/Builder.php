@@ -153,6 +153,29 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     }
 
     /**
+     * Get a paginator only supporting simple next and previous links.
+     *
+     * This is more efficient on larger data-sets, etc.
+     *
+     * @param  int  $perPage
+     * @param  array  $columns
+     * @param  string  $pageName
+     * @param  int|null  $page
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginateSimple($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        $page = $page ?: Paginator::resolveCurrentPage($pageName);
+
+        $this->skip(($page - 1) * $perPage)->take($perPage + 1);
+
+        return $this->simplePaginator($this->getSimple($columns), $perPage, $page, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => $pageName,
+        ]);
+    }
+
+    /**
      * Get simple models without eager loading.
      *
      * @param  array  $columns

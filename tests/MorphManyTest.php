@@ -7,6 +7,9 @@ class MorphManyTest extends TestCase
     public function test_morph_many_returns_related_models()
     {
         $article = Article::create(['title' => 'First test article']);
+
+        $this->assertCount(0, Article::with('likesMany')->firstSimple()->likesMany);
+
         DB::table('likable')->insert([
             ['likable_id' => $article->id, 'likable_type' => Article::class, 'like_id' => 222],
             ['likable_id' => $article->id, 'likable_type' => Article::class, 'like_id' => 222],

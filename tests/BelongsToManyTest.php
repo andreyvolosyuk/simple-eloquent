@@ -14,6 +14,9 @@ class BelongsToManyTest extends TestCase
             'name' => 'Test article'
         ]);
 
+        $this->assertCount(0, Article::with('multipleCategories')->firstSimple()->multipleCategories);
+        $this->assertCount(0, Category::with('multipleArticles')->firstSimple()->multipleArticles);
+
         $article->multipleCategories()->attach($category->id);
 
         $this->assertEquals(

@@ -94,4 +94,16 @@ class SelectTest extends TestCase
             $simplePpaginator->items()[0]->title
         );
     }
+
+    public function test_simple_paginate_simple_should_behave_the_same_as_simple_paginate()
+    {
+        $paginator = Article::simplePaginate();
+        $simplePpaginator = Article::simplePaginateSimple();
+
+        $this->assertCount(count($paginator->items()), $simplePpaginator->items());
+        $this->assertEquals(
+            $paginator->items()[0]->title,
+            $simplePpaginator->items()[0]->title
+        );
+    }
 }

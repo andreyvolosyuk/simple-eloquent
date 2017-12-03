@@ -38,11 +38,13 @@ trait Pivot
         }
 
         foreach ($models as &$model) {
+            $collection = Collection::make();
+
             if (isset($dictionary[$key = ModelAccessor::get($model, $this->parent->getKeyName())])) {
                 $collection = Collection::make($dictionary[$key]);
-
-                ModelAccessor::set($model, $relation, $collection);
             }
+
+            ModelAccessor::set($model, $relation, $collection);
         }
         unset($model);
 

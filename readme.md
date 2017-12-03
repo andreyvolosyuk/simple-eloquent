@@ -63,6 +63,7 @@ $users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->
   * firstSimpleOrFail - see [firstOrFail](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_firstOrFail) method
   * findManySimple - see [findMany](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_findMany) method
   * paginateSimple - see [paginate](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_paginate) method
+  * simplePaginateSimple - see [simplePaginate](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_simplePaginate) method
 
 
 ### Profit
@@ -79,10 +80,10 @@ $users = User::with([
 ])->limit(50)->get()
 ```
 
-|                   | Time          | Memory consuming  |
-| :---              |          ---: |          ---:     |
-| get()             | 0.62s         | 6.0mb             |
-| getSimple()       | 0.19s         | 3.0mb             |
+|                   | Time          | Memory consumption  |
+| :---              |          ---: |          ---:       |
+| get()             | 0.62s         | 6.0mb               |
+| getSimple()       | 0.19s         | 3.0mb               |
 
 ##### Exapmle 2 - select models with 5-level relation
 
@@ -90,17 +91,17 @@ $users = User::with([
 $goals = Goal::with('goalUser.user.courses.points.user')->limit(20)->get()
 ```
 
-|                   | Time          | Memory consuming  |
-| :---              |          ---: |          ---:     |
-| get()             | 1.48s         | 28.5mb             |
-| getSimple()       | 0.47s         | 15.5mb             |
+|                   | Time          | Memory consumption  |
+| :---              |          ---: |          ---:       |
+| get()             | 1.48s         | 28.5mb              |
+| getSimple()       | 0.47s         | 15.5mb              |
 
 ##### Exapmle 3 - let's select 1000 models
 ```php
 $performance = Performance::whereHas('user')->with('goal.goalUser')->limit(1000)->get()
 ```
 
-|                   | Time          | Memory consuming  |
-| :---              |          ---: |          ---:     |
-| get()             | 0.22s         | 2.0mb             |
-| getSimple()       | 0.06s         | 1.1mb             |
+|                   | Time          | Memory consumption  |
+| :---              |          ---: |          ---:       |
+| get()             | 0.22s         | 2.0mb               |
+| getSimple()       | 0.06s         | 1.1mb               |

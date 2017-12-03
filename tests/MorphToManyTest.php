@@ -29,6 +29,8 @@ class MorphToManyTest extends TestCase
         $firstLike = Like::create(['like_for_id' => 1, 'like_for_type' => 'test']);
         $secondLike = Like::create(['like_for_id' => 1, 'like_for_type' => 'test']);
 
+        $this->assertCount(0, Article::with('likes')->firstSimple()->likes);
+
         DB::table('likable')->insert([
             ['like_id' => $firstLike->id, 'likable_id' => $article->id, 'likable_type' => Article::class],
             ['like_id' => $secondLike->id, 'likable_id' => $article->id, 'likable_type' => Article::class]
