@@ -9,7 +9,6 @@
       "email": "valasiuk.andrei@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "illuminate/support": "5.3.*",
     "illuminate/database": "5.3.*",
