@@ -15,9 +15,9 @@ In this case this methods might be enough useful for you.
 
 ### Extension supports:
 
-    * eloquent relations
-    * illuminate pagination
-    * PDO::FETCH_OBJ and PDO::FETCH_ASSOC fetch modes
+    - eloquent relations
+    - illuminate pagination
+    - PDO::FETCH_OBJ and PDO::FETCH_ASSOC fetch modes
 
 
 ### Requirements
@@ -105,3 +105,133 @@ $performance = Performance::whereHas('user')->with('goal.goalUser')->limit(1000)
 | :---              |          ---: |          ---:       |
 | get()             | 0.22s         | 2.0mb               |
 | getSimple()       | 0.06s         | 1.1mb               |
+
+### What do you loose?
+
+Since this extension provides less expensive methods you'll definitely loose some functionality. Basic methods return collection of eloquent models in contrast to new additional methods which return collection of stdClasses|arrays.
+This exapmle will show the difference between results.
+
+```php
+$categories = Category::with('articles')->get() // want to grab all categories with articles
+```
+
+##### Method _get_ returns
+
+```php
+Illuminate\Database\Eloquent\Collection::__set_state([
+    'items' => [
+        0 => Category::__set_state([
+            'guarded' => [],
+            'connection' => 'default',
+            'table' => NULL,
+            'primaryKey' => 'id',
+            'keyType' => 'int',
+            'incrementing' => true,
+            'with' => [],
+            'withCount' => [],
+            'perPage' => 15,
+            'exists' => true,
+            'wasRecentlyCreated' => false,
+            'attributes' => [
+                'id' => '1',
+                'name' => 'Test category',
+                'created_at' => '2017-12-21 12:33:34',
+                'updated_at' => '2017-12-21 12:33:34'
+            ],
+            'original' => [
+                'id' => '1',
+                'name' => 'Test category',
+                'created_at' => '2017-12-21 12:33:34',
+                'updated_at' => '2017-12-21 12:33:34',
+            ],
+            'changes' => [],
+            'casts' => [],
+            'dates' => [],
+            'dateFormat' => NULL,
+            'appends' => [],
+            'dispatchesEvents' => [],
+            'observables' => [],
+            'relations' => [
+                'articles' => Illuminate\Database\Eloquent\Collection::__set_state([
+                    'items' => [
+                        0 => Article::__set_state([
+                            'guarded' => [],
+                            'connection' => 'default',
+                            'table' => NULL,
+                            'primaryKey' => 'id',
+                            'keyType' => 'int',
+                            'incrementing' => true,
+                            'with' => [],
+                            'withCount' => [],
+                            'perPage' => 15,
+                            'exists' => true,
+                            'wasRecentlyCreated' => false,
+                            'attributes' => [
+                                'id' => '1',
+                                'category_id' => '1',
+                                'title' => 'Test article',
+                                'created_at' => '2017-12-21 12:33:34',
+                                'updated_at' => '2017-12-21 12:33:34',
+                            ],
+                            'original' => [
+                                'id' => '1',
+                                'category_id' => '1',
+                                'title' => 'Test article',
+                                'created_at' => '2017-12-21 12:33:34',
+                                'updated_at' => '2017-12-21 12:33:34',
+                            ],
+                            'changes' => [],
+                            'casts' => [],
+                            'dates' => [],
+                            'dateFormat' => NULL,
+                            'appends' => [],
+                            'dispatchesEvents' => [],
+                            'observables' => [],
+                            'relations' => [],
+                            'touches' => [],
+                            'timestamps' => true,
+                            'hidden' => [],
+                            'visible' => [],
+                            'fillable' => [],
+                        ]),
+                    ],
+                ]),
+            ],
+            'touches' => [],
+            'timestamps' => true,
+            'hidden' => [],
+            'visible' => [],
+            'fillable' => [],
+        ])
+    ]
+]);
+```
+
+##### Method _getSimple_ returns
+
+```php
+Illuminate\Support\Collection::__set_state([
+    'items' => [
+        0 => stdClass::__set_state([
+            'id' => '1',
+            'name' => 'Test category',
+            'created_at' => '2017-12-21 12:43:44',
+            'updated_at' => '2017-12-21 12:43:44',
+            'articles' => Illuminate\Support\Collection::__set_state([
+                'items' => [
+                    0 => stdClass::__set_state([
+                        'id' => '1',
+                        'category_id' => '1',
+                        'title' => 'Test article',
+                        'created_at' => '2017-12-21 12:43:44',
+                        'updated_at' => '2017-12-21 12:43:44',
+                    ]),
+                ],
+            ]),
+        ]),
+    ]
+]);
+```
+
+Since you'll get stdClasses|arrays you won't reach out to casting, appends, guarded/fillable, crud and another possibilities.
+That's why new methods are much faster :smirk:
