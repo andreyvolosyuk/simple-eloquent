@@ -55,15 +55,15 @@ $users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->
 
 ### List of available methods
 
-  * allSimple - see [all](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Model.html#method_all) method
-  * getSimple - see [get](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_get) method
-  * findSimple - see [find](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_find) method
-  * findSimpleOrFail - see [findOrFail](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_findOrFail) method
-  * firstSimple - see [first](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_first) method
-  * firstSimpleOrFail - see [firstOrFail](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_firstOrFail) method
-  * findManySimple - see [findMany](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_findMany) method
-  * paginateSimple - see [paginate](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_paginate) method
-  * simplePaginateSimple - see [simplePaginate](https://laravel.com/api/5.5/Illuminate/Database/Eloquent/Builder.html#method_simplePaginate) method
+  * allSimple - see [all](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Model.html#method_all) method
+  * getSimple - see [get](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_get) method
+  * findSimple - see [find](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_find) method
+  * findSimpleOrFail - see [findOrFail](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_findOrFail) method
+  * firstSimple - see [first](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_first) method
+  * firstSimpleOrFail - see [firstOrFail](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_firstOrFail) method
+  * findManySimple - see [findMany](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_findMany) method
+  * paginateSimple - see [paginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_paginate) method
+  * simplePaginateSimple - see [simplePaginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_simplePaginate) method
 
 
 ### Profit
