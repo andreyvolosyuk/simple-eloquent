@@ -12,7 +12,6 @@ Sometimes application doesn't need all of eloquent overhead. It just requires to
 In this case this methods might be enough useful for you.
 <br><br>
 
-
 ### Extension supports:
 
     - eloquent relations
@@ -21,9 +20,11 @@ In this case this methods might be enough useful for you.
 
 
 ### Requirements
+
     laravel >= 5.3
     
-### Instalation
+### Installation
+
 Run
 
 ```
@@ -47,8 +48,10 @@ class Department extends \Illuminate\Database\Eloquent\Model
     use SimpleEloquent;
 }
 ```
+
 Then use *getSimple()*(or another available) method instead of *get*.
 All of available methods have the same signature as their default analogues. They have the same name but with _Simple_ suffix.
+
 ```php
 $users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->getSimple()
 ```
@@ -65,12 +68,11 @@ $users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->
   * paginateSimple - see [paginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_paginate) method
   * simplePaginateSimple - see [simplePaginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_simplePaginate) method
 
-
 ### Profit
 
-This extesion was tested on real project. 
+This extension was tested on real project. 
 
-##### Exapmle 1 - users with details; 50 per page
+##### Example 1 - users with details; 50 per page
 
 ```php
 $users = User::with([
@@ -85,7 +87,7 @@ $users = User::with([
 | get()             | 0.62s         | 6.0mb               |
 | getSimple()       | 0.19s         | 3.0mb               |
 
-##### Exapmle 2 - select models with 5-level relation
+##### Example 2 - select models with 5-level relation
 
 ```php
 $goals = Goal::with('goalUser.user.courses.points.user')->limit(20)->get()
@@ -96,7 +98,8 @@ $goals = Goal::with('goalUser.user.courses.points.user')->limit(20)->get()
 | get()             | 1.48s         | 28.5mb              |
 | getSimple()       | 0.47s         | 15.5mb              |
 
-##### Exapmle 3 - let's select 1000 models
+##### Example 3 - let's select 1000 models
+
 ```php
 $performance = Performance::whereHas('user')->with('goal.goalUser')->limit(1000)->get()
 ```
@@ -106,10 +109,10 @@ $performance = Performance::whereHas('user')->with('goal.goalUser')->limit(1000)
 | get()             | 0.22s         | 2.0mb               |
 | getSimple()       | 0.06s         | 1.1mb               |
 
-### What do you loose?
+### What do you lose?
 
-Since this extension provides less expensive methods you'll definitely loose some functionality. Basic methods return collection of eloquent models in contrast to new additional methods which return collection of stdClasses|arrays.
-This exapmle will show the difference between results.
+Since this extension provides less expensive methods you'll definitely lose some functionality. Basic methods return collection of eloquent models in contrast to new additional methods which return collection of stdClasses|arrays.
+This example will show the difference between results.
 
 ```php
 $categories = Category::with('articles')->get() // want to grab all categories with articles
