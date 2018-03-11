@@ -14,20 +14,20 @@ class BelongsToManyTest extends TestCase
             'name' => 'Test article'
         ]);
 
-        $this->assertCount(0, Article::with('multipleCategories')->firstSimple()->multipleCategories);
-        $this->assertCount(0, Category::with('multipleArticles')->firstSimple()->multipleArticles);
+        $this->assertCount(0, Article::with('multipleCategories')->simple()->first()->multipleCategories);
+        $this->assertCount(0, Category::with('multipleArticles')->simple()->first()->multipleArticles);
 
 
         $article->multipleCategories()->attach($category->id);
 
         $this->assertEquals(
             $article->multipleCategories->first()->name,
-            Article::with('multipleCategories')->firstSimple()->multipleCategories->first()->name
+            Article::with('multipleCategories')->simple()->first()->multipleCategories->first()->name
         );
 
         $this->assertEquals(
             $category->multipleArticles->first()->title,
-            Category::with('multipleArticles')->firstSimple()->multipleArticles->first()->title
+            Category::with('multipleArticles')->simple()->first()->multipleArticles->first()->title
         );
     }
 }

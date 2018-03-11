@@ -3,6 +3,11 @@
 namespace Volosyuk\SimpleEloquent;
 
 use Closure;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorInterface;
+use Illuminate\Contracts\Pagination\Paginator as PaginatorInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -16,6 +21,142 @@ use Volosyuk\SimpleEloquent\Relations\Relation;
  */
 class Builder extends \Illuminate\Database\Eloquent\Builder
 {
+    /**
+     * @var bool
+     */
+    protected $simple = false;
+
+    /**
+     * @return $this
+     */
+    public function simple()
+    {
+        $this->simple = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSimple()
+    {
+        return $this->simple === true;
+    }
+
+    /**
+     * @param array $columns
+     * @return EloquentCollection|Collection|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->getSimple($columns);
+        }
+
+        return parent::get($columns);
+    }
+
+    /**
+     * @param mixed $id
+     * @param array $columns
+     * @return Collection|stdClass|array|null
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findSimple($id, $columns);
+        }
+
+        return parent::find($id, $columns);
+    }
+
+    /**
+     * @param mixed $id
+     * @param array $columns
+     * @return array|EloquentCollection|Model|Collection|stdClass
+     */
+    public function findOrFail($id, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findSimpleOrFail($id, $columns);
+        }
+
+        return parent::findOrFail($id, $columns);
+    }
+
+    /**
+     * @param array $columns
+     * @return array|Model|null|object|stdClass|static
+     */
+    public function first($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->firstSimple($columns);
+        }
+
+        return parent::first($columns);
+    }
+
+    /**
+     * @param array $columns
+     * @return array|Model|stdClass|static
+     */
+    public function firstOrFail($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->firstSimpleOrFail($columns);
+        }
+
+        return parent::firstOrFail($columns);
+    }
+
+    /**
+     * @param array|Arrayable $ids
+     * @param array $columns
+     * @return EloquentCollection|Collection
+     */
+    public function findMany($ids, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findManySimple($ids, $columns);
+        }
+
+        return parent::findMany($ids, $columns);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param null $page
+     * @return LengthAwarePaginatorInterface
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        if ($this->isSimple()) {
+            return $this->paginateSimple($perPage, $columns, $pageName, $page);
+        }
+
+        return parent::paginate($perPage, $columns, $pageName, $page);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param null $page
+     * @return PaginatorInterface
+     */
+    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        if ($this->isSimple()) {
+            return $this->simplePaginateSimple($perPage, $columns, $pageName, $page);
+        }
+
+        return parent::simplePaginate($perPage, $columns, $pageName, $page);
+    }
+
     /**
      * @param array $columns
      * @return Collection
@@ -56,7 +197,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @return stdClass|array|Collection
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function findSimpleOrFail($id, $columns = ['*'])
     {
@@ -92,7 +233,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @return array|stdClass
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function firstSimpleOrFail($columns = ['*'])
     {
@@ -128,7 +269,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginatorInterface
      *
      * @throws \InvalidArgumentException
      */
@@ -152,8 +293,6 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
         ]);
     }
 
-
-
     /**
      * Get a paginator only supporting simple next and previous links.
      *
@@ -163,7 +302,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return PaginatorInterface
      */
     public function simplePaginateSimple($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
