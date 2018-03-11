@@ -43,6 +43,6 @@ trait SimpleEloquent
          */
         $instance = new static;
 
-        return $instance->newQuery()->getSimple($columns);
+        return $instance->newQuery()->simple()->get($columns);
     }
 }

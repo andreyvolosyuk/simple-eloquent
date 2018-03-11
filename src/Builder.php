@@ -3,12 +3,14 @@
 namespace Volosyuk\SimpleEloquent;
 
 use Closure;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Collection as ElquentCollection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use stdClass;
-use Volosyuk\SimpleEloquent\Relations\Relation;
 
 /**
  * Class Builder
@@ -16,6 +18,142 @@ use Volosyuk\SimpleEloquent\Relations\Relation;
  */
 class Builder extends \Illuminate\Database\Eloquent\Builder
 {
+    /**
+     * @var bool
+     */
+    protected $simple = false;
+
+    /**
+     * @return $this
+     */
+    public function simple()
+    {
+        $this->simple = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSimple()
+    {
+        return $this->simple === true;
+    }
+
+    /**
+     * @param array $columns
+     * @return ElquentCollection|Collection|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->getSimple($columns);
+        }
+
+        return parent::get($columns);
+    }
+
+    /**
+     * @param mixed $id
+     * @param array $columns
+     * @return Collection|stdClass|array|null
+     */
+    public function find($id, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findSimple($id, $columns);
+        }
+
+        return parent::find($id, $columns);
+    }
+
+    /**
+     * @param mixed $id
+     * @param array $columns
+     * @return array|ElquentCollection|Model|Collection|stdClass
+     */
+    public function findOrFail($id, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findSimpleOrFail($id, $columns);
+        }
+
+        return parent::findOrFail($id, $columns);
+    }
+
+    /**
+     * @param array $columns
+     * @return array|Model|null|object|stdClass|static
+     */
+    public function first($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->firstSimple($columns);
+        }
+
+        return parent::first($columns);
+    }
+
+    /**
+     * @param array $columns
+     * @return array|Model|stdClass|static
+     */
+    public function firstOrFail($columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->firstSimpleOrFail($columns);
+        }
+
+        return parent::firstOrFail($columns);
+    }
+
+    /**
+     * @param array|Arrayable $ids
+     * @param array $columns
+     * @return ElquentCollection|Collection
+     */
+    public function findMany($ids, $columns = ['*'])
+    {
+        if ($this->isSimple()) {
+            return $this->findManySimple($ids, $columns);
+        }
+
+        return parent::findMany($ids, $columns);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param null $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        if ($this->isSimple()) {
+            return $this->paginateSimple($perPage, $columns, $pageName, $page);
+        }
+
+        return parent::paginate($perPage, $columns, $pageName, $page);
+    }
+
+    /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param null $page
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
+    public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        if ($this->isSimple()) {
+            return $this->simplePaginateSimple($perPage, $columns, $pageName, $page);
+        }
+
+        return parent::simplePaginate($perPage, $columns, $pageName, $page);
+    }
+
     /**
      * @param array $columns
      * @return Collection

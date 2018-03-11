@@ -12,7 +12,7 @@ class MorphOneTest extends TestCase
 
         $this->assertEquals(
             $article->like->id,
-            Article::with('like')->firstSimple()->like->id
+            Article::simple()->with('like')->first()->like->id
         );
     }
 }

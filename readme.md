@@ -7,7 +7,7 @@ Simple eloquent extension for Laravel
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/andreyvolosyuk/simple-eloquent.svg?style=flat-square)](https://scrutinizer-ci.com/g/andreyvolosyuk/simple-eloquent/code-structure)
 
 
-This extension presents some methods for eloquent ORM in order to reduce time and memory consuming.
+This extension presents some methods for eloquent ORM in order to reduce time and memory consumption.
 Sometimes application doesn't need all of eloquent overhead. It just requires to retrieve model's attributes with relations and nothing more.
 In this case this methods might be enough useful for you.
 <br><br>
@@ -49,24 +49,12 @@ class Department extends \Illuminate\Database\Eloquent\Model
 }
 ```
 
-Then use *getSimple()*(or another available) method instead of *get*.
-All of available methods have the same signature as their default analogues. They have the same name but with _Simple_ suffix.
+Then use *simple()* method in chain of methods calls.
 
 ```php
-$users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->getSimple()
+$users = User::whereHas('units')->withCount('units')->with('units')->limit(10)->simple()->get();
+$activeUser = User::simple()->where('is_active', 1)->first();
 ```
-
-### List of available methods
-
-  * allSimple - see [all](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Model.html#method_all) method
-  * getSimple - see [get](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_get) method
-  * findSimple - see [find](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_find) method
-  * findSimpleOrFail - see [findOrFail](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_findOrFail) method
-  * firstSimple - see [first](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_first) method
-  * firstSimpleOrFail - see [firstOrFail](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_firstOrFail) method
-  * findManySimple - see [findMany](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_findMany) method
-  * paginateSimple - see [paginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_paginate) method
-  * simplePaginateSimple - see [simplePaginate](https://laravel.com/api/5.6/Illuminate/Database/Eloquent/Builder.html#method_simplePaginate) method
 
 ### Profit
 
@@ -85,7 +73,7 @@ $users = User::with([
 |                   | Time          | Memory consumption  |
 | :---              |          ---: |          ---:       |
 | get()             | 0.62s         | 6.0mb               |
-| getSimple()       | 0.19s         | 3.0mb               |
+| simple()->get()   | 0.19s         | 3.0mb               |
 
 ##### Example 2 - select models with 5-level relation
 
@@ -96,7 +84,7 @@ $goals = Goal::with('goalUser.user.courses.points.user')->limit(20)->get()
 |                   | Time          | Memory consumption  |
 | :---              |          ---: |          ---:       |
 | get()             | 1.48s         | 28.5mb              |
-| getSimple()       | 0.47s         | 15.5mb              |
+| simple()->get()   | 0.47s         | 15.5mb              |
 
 ##### Example 3 - let's select 1000 models
 
@@ -107,18 +95,18 @@ $performance = Performance::whereHas('user')->with('goal.goalUser')->limit(1000)
 |                   | Time          | Memory consumption  |
 | :---              |          ---: |          ---:       |
 | get()             | 0.22s         | 2.0mb               |
-| getSimple()       | 0.06s         | 1.1mb               |
+| simple()->get()   | 0.06s         | 1.1mb               |
 
 ### What do you lose?
 
-Since this extension provides less expensive methods you'll definitely lose some functionality. Basic methods return collection of eloquent models in contrast to new additional methods which return collection of stdClasses|arrays.
+Since this extension provides less expensive methods you'll definitely lose some functionality. Basic methods return collection of eloquent models in contrast to new functionality which returns collection of stdClasses|arrays.
 This example will show the difference between results.
 
 ```php
 $categories = Category::with('articles')->get() // want to grab all categories with articles
 ```
 
-##### Method _get_ returns
+##### _get()_ returns
 
 ```php
 Illuminate\Database\Eloquent\Collection::__set_state([
@@ -210,7 +198,7 @@ Illuminate\Database\Eloquent\Collection::__set_state([
 ]);
 ```
 
-##### Method _getSimple_ returns
+##### _simple()->get()_ returns
 
 ```php
 Illuminate\Support\Collection::__set_state([

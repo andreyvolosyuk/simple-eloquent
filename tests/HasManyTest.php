@@ -8,7 +8,7 @@ class HasManyTest extends TestCase
             'name' => 'Test category'
         ]);
 
-        $this->assertCount(0, Category::with('articles')->firstSimple()->articles);
+        $this->assertCount(0, Category::with('articles')->simple()->first()->articles);
 
         Article::create([
             'title' => 'Test article',
@@ -17,7 +17,7 @@ class HasManyTest extends TestCase
 
         $this->assertEquals(
             $category->articles->first()->title,
-            Category::with('articles')->firstSimple()->articles->first()->title
+            Category::with('articles')->simple()->first()->articles->first()->title
         );
     }
 }
