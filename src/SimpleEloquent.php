@@ -39,10 +39,10 @@ trait SimpleEloquent
         $columns = is_array($columns) ? $columns : func_get_args();
 
         /**
-         * @var Model $instance
+         * @var Builder $query
          */
-        $instance = new static;
+        $query = (new static)->newQuery();
 
-        return $instance->newQuery()->getSimple($columns);
+        return $query->simple()->get($columns);
     }
 }

@@ -12,7 +12,7 @@ class MorphToTest extends TestCase
 
         $this->assertEquals(
             $like->likable->title,
-            Like::with('likable')->firstSimple()->like_for->title
+            Like::with('likable')->simple()->first()->like_for->title
         );
     }
 }
