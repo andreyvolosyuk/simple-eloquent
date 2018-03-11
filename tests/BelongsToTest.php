@@ -15,9 +15,12 @@ class BelongsToTest extends TestCase
 
         $this->assertEquals(
             $article->category->name,
-            Article::with('category')->firstSimple()->category->name
+            Article::simple()->with('category')->first()->category->name
         );
 
         $this->assertCount(0, Article::where('id', 60)->with('category')->getSimple());
+        $this->assertCount(0, Article::simple()->where('id', 60)->with('category')->get());
+        $this->assertCount(0, Article::where('id', 60)->simple()->with('category')->get());
+
     }
 }

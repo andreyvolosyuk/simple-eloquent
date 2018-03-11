@@ -15,7 +15,7 @@ class HasOneTest extends TestCase
 
         $this->assertEquals(
             $category->article->title,
-            Category::with('article')->firstSimple()->article->title
+            Category::simple()->with('article')->first()->article->title
         );
     }
 }

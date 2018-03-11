@@ -7,7 +7,7 @@ class HasManyThroughTest extends TestCase
         $category = Category::create(['name' => 'Test category']);
         $article = Article::create(['title' => 'Test article', 'category_id' => $category->id]);
 
-        $this->assertCount(0, Category::with('comments')->firstSimple()->comments);
+        $this->assertCount(0, Category::simple()->with('comments')->first()->comments);
 
         Comment::insert([
             ['body' => 'first comment', 'article_id' => $article->id],
@@ -16,12 +16,12 @@ class HasManyThroughTest extends TestCase
 
         $this->assertEquals(
             $category->comments->count(),
-            Category::with('comments')->firstSimple()->comments->count()
+            Category::with('comments')->simple()->first()->comments->count()
         );
 
         $this->assertEquals(
             $category->comments->first()->body,
-            Category::with('comments')->firstSimple()->comments->first()->body
+            Category::with('comments')->simple()->first()->comments->first()->body
         );
     }
 }
