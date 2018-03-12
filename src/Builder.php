@@ -3,14 +3,18 @@
 namespace Volosyuk\SimpleEloquent;
 
 use Closure;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator as LengthAwarePaginatorInterface;
+use Illuminate\Contracts\Pagination\Paginator as PaginatorInterface;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Collection as ElquentCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 use stdClass;
+use Volosyuk\SimpleEloquent\Relations\Relation;
 
 /**
  * Class Builder
@@ -43,7 +47,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 
     /**
      * @param array $columns
-     * @return ElquentCollection|Collection|static[]
+     * @return EloquentCollection|Collection|static[]
      */
     public function get($columns = ['*'])
     {
@@ -71,7 +75,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param mixed $id
      * @param array $columns
-     * @return array|ElquentCollection|Model|Collection|stdClass
+     * @return array|EloquentCollection|Model|Collection|stdClass
      */
     public function findOrFail($id, $columns = ['*'])
     {
@@ -111,7 +115,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param array|Arrayable $ids
      * @param array $columns
-     * @return ElquentCollection|Collection
+     * @return EloquentCollection|Collection
      */
     public function findMany($ids, $columns = ['*'])
     {
@@ -127,7 +131,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param array $columns
      * @param string $pageName
      * @param null $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginatorInterface
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -143,7 +147,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param array $columns
      * @param string $pageName
      * @param null $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return PaginatorInterface
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -194,7 +198,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @return stdClass|array|Collection
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function findSimpleOrFail($id, $columns = ['*'])
     {
@@ -230,7 +234,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @return array|stdClass
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function firstSimpleOrFail($columns = ['*'])
     {
@@ -266,9 +270,9 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginatorInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function paginateSimple($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -299,7 +303,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return PaginatorInterface
      */
     public function simplePaginateSimple($perPage = 15, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -334,6 +338,9 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      */
     protected function loadSimpleRelation(array $models, $name, Closure $constraints)
     {
+        /**
+         * @var Relation $relation
+         */
         $relation = $this->getRelation($name);
 
         $relation->addEagerConstraintsSimple($models);

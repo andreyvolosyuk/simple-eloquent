@@ -29,7 +29,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "5.5.x-dev",
+      "dev-master": "5.6.x-dev",
+      "dev-five_five": "5.5.x-dev",
       "dev-five_four": "5.4.x-dev",
       "dev-five_three": "5.3.x-dev"
     }
