@@ -3,7 +3,6 @@
 namespace Volosyuk\SimpleEloquent\Relations;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use stdClass;
 use Volosyuk\SimpleEloquent\Builder;
@@ -78,22 +77,5 @@ trait Relation
     public function addEagerConstraintsSimple(array $models)
     {
         $this->query->whereIn($this->getQualifiedForeignKeyName(), $this->getKeys($models));
-    }
-
-    /**
-     * Builds a table-keyed array from model class names.
-     *
-     * @param  string[]|null  $models
-     * @return array|null
-     */
-    protected static function buildMorphMapFromModels(array $models = null)
-    {
-        if (is_null($models) || Arr::isAssoc($models)) {
-            return $models;
-        }
-
-        return array_combine(array_map(function ($model) {
-            return (new $model)->getTable();
-        }, $models), $models);
     }
 }
