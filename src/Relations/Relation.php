@@ -19,13 +19,6 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
 trait Relation
 {
     /**
-     * An array to map class names to their morph names in database.
-     *
-     * @var array
-     */
-    public static $morphMap = [];
-
-    /**
      * @param $models
      * @param $name
      * @return array
@@ -86,27 +79,6 @@ trait Relation
     {
         $this->query->whereIn($this->getQualifiedForeignKeyName(), $this->getKeys($models));
     }
-
-
-    /**
-     * Set or get the morph map for polymorphic relations.
-     *
-     * @param  array|null  $map
-     * @param  bool  $merge
-     * @return array
-     */
-    public static function morphMap(array $map = null, $merge = true)
-    {
-        $map = static::buildMorphMapFromModels($map);
-
-        if (is_array($map)) {
-            static::$morphMap = $merge && static::$morphMap
-                ? $map + static::$morphMap : $map;
-        }
-
-        return static::$morphMap;
-    }
-
 
     /**
      * Builds a table-keyed array from model class names.
