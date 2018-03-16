@@ -3,7 +3,7 @@
 namespace Volosyuk\SimpleEloquent\Relations;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\Relations\Relation as BaseRelation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
@@ -224,7 +224,7 @@ trait HasRelationships
      */
     public static function getActualClassNameForMorph($class)
     {
-        return Arr::get(Relation::morphMap() ?: [], $class, $class);
+        return Arr::get(BaseRelation::morphMap() ?: [], $class, $class);
     }
 
     /**
