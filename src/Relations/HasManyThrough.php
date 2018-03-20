@@ -12,7 +12,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
  */
 class HasManyThrough extends \Illuminate\Database\Eloquent\Relations\HasManyThrough
 {
-    use Relation;
+    use Relation, Pivot;
 
     /**
      * Match the eagerly loaded results to their parents.

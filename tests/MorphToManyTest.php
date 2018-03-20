@@ -16,10 +16,23 @@ class MorphToManyTest extends TestCase
         ]);
 
         $likeSimple = Like::with('articles')->firstSimple();
-        $this->assertEquals($like->articles->count(), $likeSimple->articles->count());
-        $this->assertEquals(
-            $like->articles->first()->title,
-            $likeSimple->articles->first()->title
+
+        $this->articlesTitlesAreEqual($like->articles->first(), $likeSimple->articles->first())
+            ->assertEquals($like->articles->count(), $likeSimple->articles->count());
+    }
+
+    public function test_relational_method_morphed_by_many_does_interact_with_simple()
+    {
+        $article = Article::create(['title' => 'First test article']);
+        $like = Like::create(['like_for_id' => 1, 'like_for_type' => 'test']);
+
+        DB::table('likable')->insert([
+            'like_id' => $like->id, 'likable_id' => $article->id, 'likable_type' => Article::class
+        ]);
+
+        $this->articlesTitlesAreEqual(
+            $like->articles()->first(),
+            $like->articles()->simple()->first()
         );
     }
 
@@ -37,11 +50,47 @@ class MorphToManyTest extends TestCase
         ]);
 
         $articleSimple = Article::simple()->with('likes')->first();
-        $this->assertEquals($article->likes->count(), $articleSimple->likes->count());
 
-        $this->assertEquals(
-            $article->likes->first()->id,
-            $articleSimple->likes->first()->id
+        $this->compareLikes($article->likes->first(), $articleSimple->likes->first())
+            ->assertEquals($article->likes->count(), $articleSimple->likes->count());
+    }
+
+    public function test_relational_method_morph_to_many_does_interact_with_simple()
+    {
+        $article = Article::create(['title' => 'First test article']);
+        $like = Like::create(['like_for_id' => 1, 'like_for_type' => 'test']);
+        DB::table('likable')->insert([
+            ['like_id' => $like->id, 'likable_id' => $article->id, 'likable_type' => Article::class],
+        ]);
+
+        $this->compareLikes(
+            $article->likes()->first(),
+            $article->likes()->simple()->first()
+        )->compareLikes(
+            $article->likes()->find($like->id),
+            $article->likes()->simple()->find($like->id)
+        )->compareLikes(
+            $article->likes()->findMany([$like->id])->first(),
+            $article->likes()->simple()->findMany([$like->id])->first()
+        )->compareLikes(
+            $article->likes()->get()->first(),
+            $article->likes()->simple()->get()->first()
+        )->compareLikes(
+            $article->likes()->paginate()->getCollection()->first(),
+            $article->likes()->simple()->paginate()->getCollection()->first()
+        )->compareLikes(
+            $article->likes()->simplePaginate()->getCollection()->first(),
+            $article->likes()->simple()->simplePaginate()->getCollection()->first()
         );
+    }
+
+    private function compareLikes(Like $like, stdClass $primitiveLike)
+    {
+        $this->assertEquals(
+            $like->id,
+            $primitiveLike->id
+        );
+
+        return $this;
     }
 }

@@ -11,6 +11,7 @@ class Comment
     {
         DB::schema()->create('comments', function (Blueprint $table) {
             $table->increments('id');
+            $table->timestamps();
             $table->unsignedInteger('article_id');
             $table->string('body');
         });
