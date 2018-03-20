@@ -3,19 +3,58 @@
 
 class HasOneTest extends TestCase
 {
-    public function test_model_should_return_its_child()
+    /**
+     * @var Category
+     */
+    private $category;
+
+    /**
+     * @var Article
+     */
+    private $article;
+
+    protected function setUp()
     {
-        $category = Category::create([
+        parent::setUp();
+
+        $this->category = Category::create([
             'name' => 'Test category'
         ]);
-        Article::create([
-            'title' => 'Test article',
-            'category_id' => $category->id
-        ]);
 
-        $this->assertEquals(
-            $category->article->title,
-            Category::simple()->with('article')->first()->article->title
+        $this->article = Article::create([
+            'title' => 'Test article',
+            'category_id' => $this->category->id
+        ]);
+    }
+
+    public function test_model_should_return_its_child()
+    {
+        $this->articlesTitlesAreEqual(
+            $this->category->article,
+            Category::simple()->with('article')->first()->article
+        );
+    }
+
+    public function test_relational_method_has_one_does_interact_with_simple()
+    {
+        $this->articlesTitlesAreEqual(
+            $this->category->article()->first(),
+            $this->category->article()->simple()->first()
+        )->articlesTitlesAreEqual(
+            $this->category->articles()->find($this->article->id),
+            $this->category->articles()->simple()->find($this->article->id)
+        )->articlesTitlesAreEqual(
+            $this->category->articles()->findMany([$this->article->id])->first(),
+            $this->category->articles()->simple()->findMany([$this->article->id])->first()
+        )->articlesTitlesAreEqual(
+            $this->category->articles()->get()->first(),
+            $this->category->articles()->simple()->get()->first()
+        )->articlesTitlesAreEqual(
+            $this->category->articles()->paginate()->getCollection()->first(),
+            $this->category->articles()->simple()->paginate()->getCollection()->first()
+        )->articlesTitlesAreEqual(
+            $this->category->articles()->simplePaginate()->getCollection()->first(),
+            $this->category->articles()->simple()->simplePaginate()->getCollection()->first()
         );
     }
 }

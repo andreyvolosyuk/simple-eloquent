@@ -26,4 +26,16 @@ class TestCase extends \PHPUnit\Framework\TestCase
         $database->bootEloquent();
         $database->setAsGlobal();
     }
+
+    /**
+     * @param Article $article
+     * @param stdClass $primitiveArticle
+     * @return $this
+     */
+    protected function articlesTitlesAreEqual(Article $article, stdClass $primitiveArticle)
+    {
+        $this->assertEquals($article->title, $primitiveArticle->title);
+
+        return $this;
+    }
 }

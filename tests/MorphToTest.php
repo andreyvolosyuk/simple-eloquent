@@ -2,17 +2,55 @@
 
 class MorphToTest extends TestCase
 {
-    public function test_morph_to_relation_returns_related_models()
+    /**
+     * @var Article
+     */
+    private $article;
+
+    /**
+     * @var Like
+     */
+    private $like;
+
+    protected function setUp()
     {
-        $article = Article::create(['title' => 'Test article']);
-        $like = Like::create([
-            'like_for_id' => $article->id,
+        parent::setUp();
+
+        $this->article = Article::create(['title' => 'Test article']);
+        $this->like= Like::create([
+            'like_for_id' => $this->article->id,
             'like_for_type' => Article::class
         ]);
+    }
 
-        $this->assertEquals(
-            $like->likable->title,
-            Like::with('likable')->simple()->first()->like_for->title
+    public function test_morph_to_relation_returns_related_models()
+    {
+        $this->articlesTitlesAreEqual(
+            $this->like->likable,
+            Like::with('likable')->simple()->first()->like_for
+        );
+    }
+
+    public function test_relational_method_morph_to_does_interact_with_simple()
+    {
+        $this->articlesTitlesAreEqual(
+            $this->like->likable()->first(),
+            $this->like->likable()->simple()->first()
+        )->articlesTitlesAreEqual(
+            $this->like->likable()->find($this->like->id),
+            $this->like->likable()->simple()->find($this->like->id)
+        )->articlesTitlesAreEqual(
+            $this->like->likable()->findMany([$this->like->id])->first(),
+            $this->like->likable()->simple()->findMany([$this->like->id])->first()
+        )->articlesTitlesAreEqual(
+            $this->like->likable()->get()->first(),
+            $this->like->likable()->simple()->get()->first()
+        )->articlesTitlesAreEqual(
+            $this->like->likable()->paginate()->getCollection()->first(),
+            $this->like->likable()->simple()->paginate()->getCollection()->first()
+        )->articlesTitlesAreEqual(
+            $this->like->likable()->simplePaginate()->getCollection()->first(),
+            $this->like->likable()->simple()->simplePaginate()->getCollection()->first()
         );
     }
 }
