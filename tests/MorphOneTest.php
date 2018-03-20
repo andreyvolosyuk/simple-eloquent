@@ -2,17 +2,63 @@
 
 class MorphOneTest extends TestCase
 {
-    public function test_morph_one_returns_morphed_models()
+    /**
+     * @var Article
+     */
+    private $article;
+
+    /**
+     * @var Like
+     */
+    private $like;
+
+    protected function setUp()
     {
-        $article = Article::create(['title' => 'Test article']);
-        Like::create([
-            'like_for_id' => $article->id,
-            'like_for_type' => get_class($article)
+        parent::setUp();
+
+        $this->article = Article::create(['title' => 'Test article']);
+        $this->like = Like::create([
+            'like_for_id' => $this->article->id,
+            'like_for_type' => get_class($this->article)
         ]);
 
-        $this->assertEquals(
-            $article->like->id,
-            Article::simple()->with('like')->first()->like->id
+    }
+
+    public function test_morph_one_returns_morphed_models()
+    {
+        $this->compareLikes($this->article->like, Article::simple()->with('like')->first()->like);
+    }
+
+    public function test_relational_method_morph_one_does_interact_with_simple()
+    {
+        $this->compareLikes(
+            $this->article->like()->first(),
+            $this->article->like()->simple()->first()
+        )->compareLikes(
+            $this->article->like()->find($this->like->id),
+            $this->article->like()->simple()->find($this->like->id)
+        )->compareLikes(
+            $this->article->like()->findMany([$this->like->id])->first(),
+            $this->article->like()->simple()->findMany([$this->like->id])->first()
+        )->compareLikes(
+            $this->article->like()->get()->first(),
+            $this->article->like()->simple()->get()->first()
+        )->compareLikes(
+            $this->article->like()->paginate()->getCollection()->first(),
+            $this->article->like()->simple()->paginate()->getCollection()->first()
+        )->compareLikes(
+            $this->article->like()->simplePaginate()->getCollection()->first(),
+            $this->article->like()->simple()->simplePaginate()->getCollection()->first()
         );
+    }
+
+    private function compareLikes(Like $like, stdClass $primitiveLike)
+    {
+        $this->assertEquals(
+            $like->id,
+            $primitiveLike->id
+        );
+
+        return $this;
     }
 }

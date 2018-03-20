@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Collection;
+
 /**
  * Class GetTest
  */
@@ -79,15 +81,16 @@ class SelectTest extends TestCase
         )->assertCount(count($paginator->items()), $simplePpaginator->items());
     }
 
-    /**
-     * @param Article $article
-     * @param stdClass $primitiveArticle
-     * @return $this
-     */
-    private function articlesTitlesAreEqual(Article $article, stdClass $primitiveArticle)
+    public function test_chunk_should_behave_the_same_as_chunk()
     {
-        $this->assertEquals($article->title, $primitiveArticle->title);
+        Article::chunk(10, function (Collection $articles) use (&$article) {
+            $article = $articles->first();
+        });
 
-        return $this;
+        Article::simple()->chunk(10, function (Collection $articles) use (&$primitiveArticle) {
+            $primitiveArticle = $articles->first();
+        });
+
+        $this->articlesTitlesAreEqual($article, $primitiveArticle);
     }
 }
