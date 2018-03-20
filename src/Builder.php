@@ -39,7 +39,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @return bool
      */
-    private function isSimple()
+    public function isSimple()
     {
         return $this->simple === true;
     }

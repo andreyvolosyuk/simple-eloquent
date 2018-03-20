@@ -13,6 +13,7 @@ class Likable
             $table->increments('id');
             $table->unsignedInteger('like_id');
             $table->unsignedInteger('likable_id');
+            $table->timestamps();
             $table->string('likable_type');
         });
     }
