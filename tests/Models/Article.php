@@ -61,4 +61,12 @@ class Article extends \Illuminate\Database\Eloquent\Model
     {
         return $this->morphMany(Likable::class, 'likable');
     }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'article_users');
+    }
 }

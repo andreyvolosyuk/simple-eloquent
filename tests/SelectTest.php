@@ -7,11 +7,16 @@ use Illuminate\Support\Collection;
  */
 class SelectTest extends TestCase
 {
+    /**
+     * @var Article
+     */
+    private $article;
+
     protected function setUp()
     {
         parent::setUp();
 
-        Article::create([
+        $this->article = Article::create([
             'title' => 'Test title'
         ]);
     }
@@ -90,5 +95,14 @@ class SelectTest extends TestCase
         });
 
         $this->articlesTitlesAreEqual($article, $primitiveArticle);
+    }
+
+    public function test_belongs_to_many_has_isSimple_method()
+    {
+        $user = User::create(['id' => 1]);
+
+        $user->articles()->attach($this->article->id, ['user_id' => $user->id]);
+
+        $this->assertEquals($user->id, $this->article->users()->first()->id);
     }
 }
