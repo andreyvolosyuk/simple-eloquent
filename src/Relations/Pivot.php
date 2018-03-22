@@ -63,7 +63,7 @@ trait Pivot
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        if ($this->query->isSimple()) {
+        if ($this->isSimple()) {
             $this->query->addSelect($this->shouldSelect($columns));
 
             return tap($this->query->paginate($perPage, $columns, $pageName, $page), function ($paginator) {
@@ -87,7 +87,7 @@ trait Pivot
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        if ($this->query->isSimple()) {
+        if ($this->isSimple()) {
             $this->query->addSelect($this->shouldSelect($columns));
             return tap($this->query->simplePaginate($perPage, $columns, $pageName, $page), function ($paginator) {
                 $items = $paginator->items();
@@ -109,7 +109,7 @@ trait Pivot
      */
     public function chunk($count, callable $callback)
     {
-        if ($this->query->isSimple()) {
+        if ($this->isSimple()) {
 
             $this->query->addSelect($this->shouldSelect());
 
@@ -134,7 +134,7 @@ trait Pivot
      */
     public function get($columns = ['*'])
     {
-        if ($this->query->isSimple()) {
+        if ($this->isSimple()) {
             return $this->getSimple($columns);
         }
 
@@ -211,5 +211,13 @@ trait Pivot
         unset($value);
 
         return $values;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSimple()
+    {
+        return method_exists($this->query, 'isSimple') && $this->query->isSimple();
     }
 }
