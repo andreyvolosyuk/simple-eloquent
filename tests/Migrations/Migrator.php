@@ -16,7 +16,8 @@ class Migrator
         ArticleCategory::class,
         Comment::class,
         Like::class,
-        Likable::class
+        Likable::class,
+        User::class
     ];
 
     /**
