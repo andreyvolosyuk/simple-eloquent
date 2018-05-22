@@ -5,6 +5,7 @@ Simple eloquent extension for Laravel
 [![Software License](https://img.shields.io/github/license/andreyvolosyuk/simple-eloquent.svg?style=flat-square)](https://github.com/andreyvolosyuk/simple-eloquent/blob/master/LICENSE.txt)
 [![Quality Score](https://img.shields.io/scrutinizer/g/andreyvolosyuk/simple-eloquent.svg?style=flat-square)](https://scrutinizer-ci.com/g/andreyvolosyuk/simple-eloquent/)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/andreyvolosyuk/simple-eloquent.svg?style=flat-square)](https://scrutinizer-ci.com/g/andreyvolosyuk/simple-eloquent/code-structure)
+[![Total Downloads](https://img.shields.io/packagist/dt/volosyuk/simple-eloquent.svg?style=flat-square)](https://packagist.org/packages/volosyuk/simple-eloquent)
 
 
 This extension presents some methods for eloquent ORM in order to reduce time and memory consumption.
