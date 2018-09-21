@@ -8,6 +8,6 @@ class User extends \Illuminate\Database\Eloquent\Model
 
     public function articles()
     {
-        return $this->belongsToMany(Article::class, 'article_users');
+        return $this->belongsToMany(Article::class);
     }
 }

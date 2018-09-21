@@ -9,7 +9,7 @@ class ArticleCategory
 {
     public static function run()
     {
-        DB::schema()->create('article_categories', function (Blueprint $table) {
+        DB::schema()->create('article_category', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
             $table->unsignedInteger('cat_id');

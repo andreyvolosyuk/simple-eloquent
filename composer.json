@@ -10,9 +10,9 @@
     }
   ],
   "require": {
-    "illuminate/database": "5.6.*",
-    "illuminate/support": "5.6.*",
-    "illuminate/pagination": "5.6.*"
+    "illuminate/database": "5.7.*",
+    "illuminate/support": "5.7.*",
+    "illuminate/pagination": "5.7.*"
   },
   "autoload": {
     "psr-4": {
@@ -29,7 +29,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "5.6.x-dev",
+      "dev-master": "5.7.x-dev",
+      "dev-five_six": "5.6.x-dev",
       "dev-five_five": "5.5.x-dev",
       "dev-five_four": "5.4.x-dev",
       "dev-five_three": "5.3.x-dev"

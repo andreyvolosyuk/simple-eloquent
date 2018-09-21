@@ -38,7 +38,7 @@ class Category extends \Illuminate\Database\Eloquent\Model
      */
     public function multipleArticles()
     {
-        return $this->belongsToMany(Article::class, 'article_categories', 'article_id', 'cat_id');
+        return $this->belongsToMany(Article::class, null, 'article_id', 'cat_id');
     }
 
     /**

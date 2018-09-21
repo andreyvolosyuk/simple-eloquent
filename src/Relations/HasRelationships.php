@@ -393,7 +393,7 @@ trait HasRelationships
         $relatedPivotKey = $relatedPivotKey ?: $instance->getForeignKey();
 
         if (is_null($table)) {
-            $table = $this->joiningTable($related);
+            $table = $this->joiningTable($related, $instance);
         }
 
         return $this->newBelongsToMany(
@@ -505,38 +505,5 @@ trait HasRelationships
             $related, $name, $table, $foreignPivotKey,
             $relatedPivotKey, $parentKey, $relatedKey, true
         );
-    }
-
-
-    /**
-     * Get the relationship name of the belongs to many.
-     *
-     * @return string
-     */
-    protected function guessBelongsToManyRelation()
-    {
-        $caller = Arr::first(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), function ($trace) {
-            return ! in_array($trace['function'], Model::$manyMethods);
-        });
-
-        return ! is_null($caller) ? $caller['function'] : null;
-    }
-
-    /**
-     * Get the joining table name for a many-to-many relation.
-     *
-     * @param string $related
-     * @return string
-     */
-    public function joiningTable($related)
-    {
-        $models = [
-            Str::snake(class_basename($related)),
-            Str::snake(class_basename($this)),
-        ];
-
-        sort($models);
-
-        return strtolower(implode('_', $models));
     }
 }

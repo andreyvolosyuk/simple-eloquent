@@ -35,7 +35,7 @@ class Article extends \Illuminate\Database\Eloquent\Model
      */
     public function multipleCategories()
     {
-        return $this->belongsToMany(Category::class, 'article_categories', 'cat_id', 'article_id');
+        return $this->belongsToMany(Category::class, null, 'cat_id', 'article_id');
     }
 
     /**
@@ -67,6 +67,6 @@ class Article extends \Illuminate\Database\Eloquent\Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'article_users');
+        return $this->belongsToMany(User::class);
     }
 }

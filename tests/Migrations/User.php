@@ -12,7 +12,7 @@ class User
         DB::schema()->create('users', function (Blueprint $table) {
             $table->increments('id');
         });
-        DB::schema()->create('article_users', function (Blueprint $table) {
+        DB::schema()->create('article_user', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('article_id');
             $table->integer('user_id');
