@@ -59,8 +59,6 @@ $activeUser = User::simple()->where('is_active', 1)->first();
 
 ### Profit
 
-This extension was tested on real project. 
-
 ##### Example 1 - users with details; 50 per page
 
 ```php
