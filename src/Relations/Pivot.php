@@ -2,6 +2,9 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -58,7 +61,7 @@ trait Pivot
      *
      * @return Collection
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSimple($columns = ['*'])
     {
@@ -86,7 +89,7 @@ trait Pivot
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -110,7 +113,7 @@ trait Pivot
      * @param  array  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -157,7 +160,7 @@ trait Pivot
      *
      * @return Collection
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function get($columns = ['*'])
     {
@@ -175,7 +178,7 @@ trait Pivot
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function hydrateSimplePivotRelation(array &$models)
     {
@@ -194,7 +197,7 @@ trait Pivot
      *
      * @return array
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function cleanSimplePivotAttributes(&$model)
     {

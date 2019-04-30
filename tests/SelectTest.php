@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 /**
@@ -17,6 +18,7 @@ class SelectTest extends TestCase
         parent::setUp();
 
         $this->article = Article::create([
+            'id' => 50,
             'title' => 'Test title'
         ]);
     }
@@ -38,30 +40,30 @@ class SelectTest extends TestCase
 
     public function test_find_simple_returns_the_same_attributes_as_find()
     {
-        $this->articlesTitlesAreEqual(Article::find(1), Article::simple()->find(1))
-            ->articlesTitlesAreEqual(Article::find([1])->first(), Article::simple()->find([1])->first());
+        $this->articlesTitlesAreEqual(Article::find($this->article->id), Article::simple()->find($this->article->id))
+            ->articlesTitlesAreEqual(Article::find([$this->article->id])->first(), Article::simple()->find([$this->article->id])->first());
     }
 
     public function test_first_simple_or_fail_should_throw_an_exception_on_not_existed_model()
     {
         $this->articlesTitlesAreEqual(
-            Article::where('id', 1)->firstOrFail(),
-            Article::where('id', 1)->simple()->firstOrFail()
-        )->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+            Article::where('id', $this->article->id)->firstOrFail(),
+            Article::where('id', $this->article->id)->simple()->firstOrFail()
+        )->expectException(ModelNotFoundException::class);
 
         Article::where('id', 60)->simple()->firstOrFail();
     }
 
     public function test_find_simple_or_fail_should_throw_an_exception_on_not_existed_model()
     {
-        $this->articlesTitlesAreEqual(Article::findOrFail([1])->first(), Article::simple()->findOrFail([1])->first())
-            ->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+        $this->articlesTitlesAreEqual(Article::findOrFail([$this->article->id])->first(), Article::simple()->findOrFail([$this->article->id])->first())
+            ->expectException(ModelNotFoundException::class);
         Article::simple()->findOrFail(60);
     }
 
     public function test_find_many_simple_should_return_full_or_empty_collection_depends_on_circumstances()
     {
-        $this->articlesTitlesAreEqual(Article::findMany([1])->first(), Article::simple()->findMany([1])->first())
+        $this->articlesTitlesAreEqual(Article::findMany([$this->article->id])->first(), Article::simple()->findMany([$this->article->id])->first())
             ->assertEquals(0, Article::simple()->findMany(null)->count());
     }
 

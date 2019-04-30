@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Capsule\Manager as DB;
+use Migrations\Migrator;
 
 /**
  * Class TestCase
@@ -10,7 +11,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->setUpDatabase();
-        \Migrations\Migrator::run();
+        Migrator::run();
     }
     
     /**
@@ -35,6 +36,18 @@ class TestCase extends \PHPUnit\Framework\TestCase
     protected function articlesTitlesAreEqual(Article $article, stdClass $primitiveArticle)
     {
         $this->assertEquals($article->title, $primitiveArticle->title);
+
+        return $this;
+    }
+
+    /**
+     * @param Comment $comment
+     * @param stdClass $primitiveComment
+     * @return $this
+     */
+    protected function checkCommentsBodies(Comment $comment, stdClass $primitiveComment)
+    {
+        $this->assertEquals($comment->body, $primitiveComment->body);
 
         return $this;
     }

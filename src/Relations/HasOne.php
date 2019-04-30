@@ -2,13 +2,14 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Illuminate\Database\Eloquent\Relations\HasOne as BaseHasOne;
 use Illuminate\Support\Collection;
 
 /**
  * Class HasOneWithSimple
  * @package Volosyuk\SimpleEloquent
  */
-class HasOne extends \Illuminate\Database\Eloquent\Relations\HasOne
+class HasOne extends BaseHasOne
 {
     use Relation, HasOneOrMany;
 

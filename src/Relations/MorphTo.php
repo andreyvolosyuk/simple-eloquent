@@ -3,6 +3,7 @@
 namespace Volosyuk\SimpleEloquent\Relations;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo as BaseMorphTo;
 use Illuminate\Support\Collection;
 use Volosyuk\SimpleEloquent\Builder;
 use Volosyuk\SimpleEloquent\ModelAccessor;
@@ -11,7 +12,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
  * Class MorphToWithSimple
  * @package Volosyuk\SimpleEloquent
  */
-class MorphTo extends \Illuminate\Database\Eloquent\Relations\MorphTo
+class MorphTo extends BaseMorphTo
 {
     use Relation;
 
@@ -84,7 +85,7 @@ class MorphTo extends \Illuminate\Database\Eloquent\Relations\MorphTo
                     &&
                     ModelAccessor::get($model, $this->foreignKey) == ModelAccessor::get($result, $this->parent->getKeyName())
                 ) {
-                    ModelAccessor::set($model, $this->relation, $result);
+                    ModelAccessor::set($model, $this->relationName, $result);
                 }
             }
             unset($model);

@@ -18,10 +18,12 @@ class HasOneTest extends TestCase
         parent::setUp();
 
         $this->category = Category::create([
+            'id' => 50,
             'name' => 'Test category'
         ]);
 
         $this->article = Article::create([
+            'id' => 20,
             'title' => 'Test article',
             'category_id' => $this->category->id
         ]);

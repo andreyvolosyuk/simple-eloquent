@@ -333,7 +333,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      *
      * @param  array  $models
      * @param  string  $name
-     * @param  \Closure  $constraints
+     * @param Closure $constraints
      * @return array
      */
     protected function loadSimpleRelation(array $models, $name, Closure $constraints)

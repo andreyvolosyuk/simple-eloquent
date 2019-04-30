@@ -1,17 +1,26 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Volosyuk\SimpleEloquent\Relations\BelongsToMany;
 use Volosyuk\SimpleEloquent\Relations\HasMany;
 use Volosyuk\SimpleEloquent\Relations\HasManyThrough;
 use Volosyuk\SimpleEloquent\Relations\HasOne;
+use Volosyuk\SimpleEloquent\Relations\HasOneThrough;
 use Volosyuk\SimpleEloquent\SimpleEloquent;
 
 /**
  * Class Category
  *
  * @property string $name
+ *
+ * * * related * * *
+ *
+ * @property Article $article
+ * @property Comment $comment
+ * @property Comment[]|Collection $comments
  */
-class Category extends \Illuminate\Database\Eloquent\Model
+class Category extends Model
 {
     use SimpleEloquent;
 
@@ -46,6 +55,14 @@ class Category extends \Illuminate\Database\Eloquent\Model
      */
     public function comments()
     {
-        return $this->hasManyThrough(Comment::class, Article::class);
+        return $this->hasManyThrough(Comment::class, Article::class, 'category_id', 'article_id', 'id', 'id');
+    }
+
+    /**
+     * @return HasOneThrough
+     */
+    public function comment()
+    {
+        return $this->hasOneThrough(Comment::class, Article::class, 'category_id', 'article_id', 'id', 'id');
     }
 }

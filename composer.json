@@ -10,9 +10,9 @@
     }
   ],
   "require": {
-    "illuminate/database": "5.7.*",
-    "illuminate/support": "5.7.*",
-    "illuminate/pagination": "5.7.*"
+    "illuminate/database": "5.8.*",
+    "illuminate/support": "5.8.*",
+    "illuminate/pagination": "5.8.*"
   },
   "autoload": {
     "psr-4": {
@@ -25,11 +25,12 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^7"
+    "phpunit/phpunit": "^7.5"
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "5.7.x-dev",
+      "dev-master": "5.8.x-dev",
+      "dev-five_seven": "5.7.x-dev",
       "dev-five_six": "5.6.x-dev",
       "dev-five_five": "5.5.x-dev",
       "dev-five_four": "5.4.x-dev",

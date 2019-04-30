@@ -2,16 +2,11 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
-use Illuminate\Database\Eloquent\Relations\HasManyThrough as BaseHasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough as BaseHasOneThrough;
 use Illuminate\Support\Collection;
-use stdClass;
 use Volosyuk\SimpleEloquent\ModelAccessor;
 
-/**
- * Class HasManyThroughWithSimple
- * @package Volosyuk\SimpleEloquent
- */
-class HasManyThrough extends BaseHasManyThrough
+class HasOneThrough extends BaseHasOneThrough
 {
     use Relation, Pivot;
 
@@ -21,9 +16,9 @@ class HasManyThrough extends BaseHasManyThrough
      * @param  array   $models
      * @param  Collection  $results
      * @param  string  $relation
-     * @return array|stdClass[]
+     * @return array
      */
-    protected function matchSimple(array &$models, Collection $results, $relation)
+    public function matchSimple(array &$models, Collection $results, $relation)
     {
         $dictionary = [];
 
@@ -32,13 +27,13 @@ class HasManyThrough extends BaseHasManyThrough
         }
 
         foreach ($models as &$model) {
-            $value = [];
+            $keyName = $this->parent->getKeyName();
 
-            if (isset($dictionary[$key = ModelAccessor::get($model, $this->parent->getKeyName())])) {
+            if (isset($dictionary[$key = ModelAccessor::get($model, $keyName)])) {
                 $value = $dictionary[$key];
-            }
 
-            ModelAccessor::set($model, $relation, Collection::make($value));
+                ModelAccessor::set($model, $relation, reset($value));
+            }
         }
         unset($model);
 

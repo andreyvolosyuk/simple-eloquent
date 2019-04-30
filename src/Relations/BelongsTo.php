@@ -2,6 +2,7 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo as BaseBelongsTo;
 use Illuminate\Support\Collection;
 use Volosyuk\SimpleEloquent\ModelAccessor;
 
@@ -9,7 +10,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
  * Class BelongsToWithSimple
  * @package Volosyuk\SimpleEloquent
  */
-class BelongsTo extends \Illuminate\Database\Eloquent\Relations\BelongsTo
+class BelongsTo extends BaseBelongsTo
 {
     use Relation;
 

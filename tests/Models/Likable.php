@@ -1,12 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Volosyuk\SimpleEloquent\SimpleEloquent;
 
-class Likable extends \Illuminate\Database\Eloquent\Model
+class Likable extends Model
 {
     use SimpleEloquent;
 
     protected $table = 'likable';
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 }

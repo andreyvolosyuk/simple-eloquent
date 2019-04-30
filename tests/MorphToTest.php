@@ -16,8 +16,12 @@ class MorphToTest extends TestCase
     {
         parent::setUp();
 
-        $this->article = Article::create(['title' => 'Test article']);
+        $this->article = Article::create([
+            'id' => 50,
+            'title' => 'Test article'
+        ]);
         $this->like= Like::create([
+            'id' => 30,
             'like_for_id' => $this->article->id,
             'like_for_type' => Article::class
         ]);
@@ -37,11 +41,11 @@ class MorphToTest extends TestCase
             $this->like->likable()->first(),
             $this->like->likable()->simple()->first()
         )->articlesTitlesAreEqual(
-            $this->like->likable()->find($this->like->id),
-            $this->like->likable()->simple()->find($this->like->id)
+            $this->like->likable()->find($this->article->id),
+            $this->like->likable()->simple()->find($this->article->id)
         )->articlesTitlesAreEqual(
-            $this->like->likable()->findMany([$this->like->id])->first(),
-            $this->like->likable()->simple()->findMany([$this->like->id])->first()
+            $this->like->likable()->findMany([$this->article->id])->first(),
+            $this->like->likable()->simple()->findMany([$this->article->id])->first()
         )->articlesTitlesAreEqual(
             $this->like->likable()->get()->first(),
             $this->like->likable()->simple()->get()->first()

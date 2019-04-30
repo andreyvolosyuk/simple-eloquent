@@ -16,8 +16,12 @@ class MorphOneTest extends TestCase
     {
         parent::setUp();
 
-        $this->article = Article::create(['title' => 'Test article']);
+        $this->article = Article::create([
+            'id' => 20,
+            'title' => 'Test article'
+        ]);
         $this->like = Like::create([
+            'id' => 40,
             'like_for_id' => $this->article->id,
             'like_for_type' => get_class($this->article)
         ]);

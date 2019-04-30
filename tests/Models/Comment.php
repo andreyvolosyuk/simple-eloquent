@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Volosyuk\SimpleEloquent\SimpleEloquent;
 
 /**
@@ -8,9 +9,9 @@ use Volosyuk\SimpleEloquent\SimpleEloquent;
  * @var string $body
  * @property int $article_id
  */
-class Comment extends \Illuminate\Database\Eloquent\Model
+class Comment extends Model
 {
     use SimpleEloquent;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 }

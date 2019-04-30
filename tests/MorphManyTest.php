@@ -13,7 +13,10 @@ class MorphManyTest extends TestCase
     {
         parent::setUp();
 
-        $this->article = Article::create(['title' => 'First test article']);
+        $this->article = Article::create([
+            'id' => 50,
+            'title' => 'First test article'
+        ]);
     }
 
     public function test_morph_many_returns_related_models()
@@ -21,8 +24,18 @@ class MorphManyTest extends TestCase
         $this->assertCount(0, Article::simple()->with('likesMany')->first()->likesMany);
 
         DB::table('likable')->insert([
-            ['likable_id' => $this->article->id, 'likable_type' => Article::class, 'like_id' => 222],
-            ['likable_id' => $this->article->id, 'likable_type' => Article::class, 'like_id' => 222],
+            [
+                'id' => 40,
+                'likable_id' => $this->article->id,
+                'likable_type' => Article::class,
+                'like_id' => 222
+            ],
+            [
+                'id' => 41,
+                'likable_id' => $this->article->id,
+                'likable_type' => Article::class,
+                'like_id' => 222
+            ],
         ]);
 
         $simpleArticle = Article::simple()->with('likesMany')->first();
@@ -38,7 +51,12 @@ class MorphManyTest extends TestCase
 
     public function test_relational_method_morph_many_does_interact_with_simple()
     {
-        $likable = Likable::create(['likable_id' => $this->article->id, 'likable_type' => Article::class, 'like_id' => 222]);
+        $likable = Likable::create([
+            'id' => 13,
+            'likable_id' => $this->article->id,
+            'likable_type' => Article::class,
+            'like_id' => 222
+        ]);
 
         $this->compareLikables(
             $this->article->likesMany()->first(),

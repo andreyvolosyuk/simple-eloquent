@@ -1,14 +1,15 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Volosyuk\SimpleEloquent\Relations\MorphToMany;
 use Volosyuk\SimpleEloquent\SimpleEloquent;
 
-class Like extends \Illuminate\Database\Eloquent\Model
+class Like extends Model
 {
     use SimpleEloquent;
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     public $timestamps = [];
 

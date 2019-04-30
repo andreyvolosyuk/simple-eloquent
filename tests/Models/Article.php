@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Volosyuk\SimpleEloquent\Relations\BelongsTo;
 use Volosyuk\SimpleEloquent\Relations\BelongsToMany;
 use Volosyuk\SimpleEloquent\Relations\MorphMany;
@@ -10,10 +11,15 @@ use Volosyuk\SimpleEloquent\SimpleEloquent;
 /**
  * Class Article
  *
+ * @property int $id
  * @property string $title
  * @property int $category_id
+ *
+ * * * related * * *
+ *
+ * @property Category $category
  */
-class Article extends \Illuminate\Database\Eloquent\Model
+class Article extends Model
 {
     use SimpleEloquent;
 

@@ -12,6 +12,7 @@ class HasManyTest extends TestCase
         parent::setUp();
 
         $this->category = Category::create([
+            'id' => 20,
             'name' => 'Test category'
         ]);
     }
@@ -21,6 +22,7 @@ class HasManyTest extends TestCase
         $this->assertCount(0, Category::with('articles')->simple()->first()->articles);
 
         Article::create([
+            'id' => 50,
             'title' => 'Test article',
             'category_id' => $this->category->id
         ]);
@@ -34,6 +36,7 @@ class HasManyTest extends TestCase
     public function test_relational_method_has_many_does_interact_with_simple()
     {
         $article = Article::create([
+            'id' => 50,
             'title' => 'Test article',
             'category_id' => $this->category->id
         ]);

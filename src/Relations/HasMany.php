@@ -2,6 +2,7 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Illuminate\Database\Eloquent\Relations\HasMany as BaseHasMany;
 use Illuminate\Support\Collection;
 use stdClass;
 use Volosyuk\SimpleEloquent\ModelAccessor;
@@ -10,7 +11,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
  * Class HasManyWithSimple
  * @package Volosyuk\SimpleEloquent
  */
-class HasMany extends \Illuminate\Database\Eloquent\Relations\HasMany
+class HasMany extends BaseHasMany
 {
     use Relation;
 

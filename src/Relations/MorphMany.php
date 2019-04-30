@@ -2,6 +2,7 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany as BaseMorphMany;
 use Illuminate\Support\Collection;
 use Volosyuk\SimpleEloquent\ModelAccessor;
 
@@ -9,7 +10,7 @@ use Volosyuk\SimpleEloquent\ModelAccessor;
  * Class MorphManyWIthSimple
  * @package Volosyuk\SimpleEloquent
  */
-class MorphMany extends \Illuminate\Database\Eloquent\Relations\MorphMany
+class MorphMany extends BaseMorphMany
 {
     use Relation;
 

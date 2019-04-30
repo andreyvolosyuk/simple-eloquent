@@ -16,17 +16,32 @@ class HasManyThroughTest extends TestCase
     {
         parent::setUp();
 
-        $this->category = Category::create(['name' => 'Test category']);
-        $this->article = Article::create(['title' => 'Test article', 'category_id' => $this->category->id]);
+        $this->category = Category::create([
+            'id' => 20,
+            'name' => 'Test category'
+        ]);
+        $this->article = Article::create([
+            'id' => 50,
+            'title' => 'Test article',
+            'category_id' => $this->category->id
+        ]);
     }
 
-    public function test_has_many_through_relation_returns_models_trough_another_one()
+    public function test_has_many_through_relation_returns_models_through_another_one()
     {
         $this->assertCount(0, Category::simple()->with('comments')->first()->comments);
 
         Comment::insert([
-            ['body' => 'first comment', 'article_id' => $this->article->id],
-            ['body' => 'second comment', 'article_id' => $this->article->id],
+            [
+                'id' => 99,
+                'body' => 'first comment',
+                'article_id' => $this->article->id
+            ],
+            [
+                'id' => 100,
+                'body' => 'second comment',
+                'article_id' => $this->article->id
+            ],
         ]);
 
         $this->checkCommentsBodies(
@@ -40,7 +55,11 @@ class HasManyThroughTest extends TestCase
 
     public function test_relational_method_has_many_through_does_interact_with_simple()
     {
-        $comment = Comment::create(['body' => 'first comment', 'article_id' => $this->article->id]);
+        $comment = Comment::create([
+            'id' => 100,
+            'body' => 'first comment',
+            'article_id' => $this->article->id
+        ]);
 
         $this->checkCommentsBodies(
             $this->category->comments()->first(),
@@ -61,12 +80,5 @@ class HasManyThroughTest extends TestCase
             $this->category->comments()->simplePaginate()->getCollection()->first(),
             $this->category->comments()->simple()->simplePaginate()->getCollection()->first()
         );
-    }
-
-    private function checkCommentsBodies(Comment $comment, stdClass $primitiveComment)
-    {
-        $this->assertEquals($comment->body, $primitiveComment->body);
-
-        return $this;
     }
 }

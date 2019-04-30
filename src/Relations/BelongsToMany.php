@@ -2,11 +2,13 @@
 
 namespace Volosyuk\SimpleEloquent\Relations;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany as BaseBelongsToMany;
+
 /**
  * Class BelongsToManyWithSimple
  * @package Volosyuk\SimpleEloquent
  */
-class BelongsToMany extends \Illuminate\Database\Eloquent\Relations\BelongsToMany
+class BelongsToMany extends BaseBelongsToMany
 {
     use Relation, Pivot;
 

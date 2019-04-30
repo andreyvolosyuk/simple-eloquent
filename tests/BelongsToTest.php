@@ -17,9 +17,11 @@ class BelongsToTest extends TestCase
         parent::setUp();
 
         $this->category = Category::create([
+            'id' => 15,
             'name' => 'Test category'
         ]);
         $this->article = Article::create([
+            'id' => 20,
             'title' => 'Test article',
             'category_id' => $this->category->id
         ]);
@@ -43,11 +45,11 @@ class BelongsToTest extends TestCase
             $this->article->category()->first(),
             $this->article->category()->simple()->first()
         )->compareCategoryNames(
-            $this->article->category()->find($this->article->id),
-            $this->article->category()->simple()->find($this->article->id)
+            $this->article->category()->find($this->category->id),
+            $this->article->category()->simple()->find($this->category->id)
         )->compareCategoryNames(
-            $this->article->category()->findMany([$this->article->id])->first(),
-            $this->article->category()->simple()->findMany([$this->article->id])->first()
+            $this->article->category()->findMany([$this->category->id])->first(),
+            $this->article->category()->simple()->findMany([$this->category->id])->first()
         )->compareCategoryNames(
             $this->article->category()->get()->first(),
             $this->article->category()->simple()->get()->first()
