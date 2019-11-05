@@ -8,7 +8,7 @@ class BelongsToManyTest extends TestCase
     private $article;
     private $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

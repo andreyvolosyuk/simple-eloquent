@@ -12,7 +12,7 @@ class MorphOneTest extends TestCase
      */
     private $like;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

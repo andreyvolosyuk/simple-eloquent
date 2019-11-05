@@ -13,7 +13,7 @@ class HasOneTest extends TestCase
      */
     private $article;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
