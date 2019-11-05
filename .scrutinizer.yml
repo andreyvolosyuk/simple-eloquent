@@ -1,9 +1,16 @@
 build:
-  environment:
-    php: 7.2.13
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+
+    tests-and-coverage:
+      environment:
+        php: 7.2.13
 
 imports:
-    - php
+  - php
 
 tools:
-    external_code_coverage: true
+  external_code_coverage: true
