@@ -7,7 +7,7 @@ build:
 
     tests-and-coverage:
       environment:
-        php: 7.2.13
+        php: 7.4
 
 imports:
   - php
