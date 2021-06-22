@@ -65,7 +65,7 @@ class MorphTo extends BaseMorphTo
             ->with($this->getQuery()->getEagerLoads());
 
         return $query->whereIn(
-            $instance->getTable().'.'.$instance->getKeyName(), $this->gatherKeysByType($type)
+            $instance->getTable().'.'.$instance->getKeyName(), $this->gatherKeysByType($type, $instance->getKeyType())
         )->getSimple();
     }
 
@@ -118,20 +118,5 @@ class MorphTo extends BaseMorphTo
                 $this->dictionary[ModelAccessor::get($model, $this->morphType)][ModelAccessor::get($model, $this->foreignKey)][] = $model;
             }
         }
-    }
-
-    /**
-     * Gather all of the foreign keys for a given type.
-     *
-     * @param  string  $type
-     * @return array
-     */
-    protected function gatherSimpleKeysByType($type)
-    {
-        $foreign = $this->foreignKey;
-
-        return collect($this->dictionary[$type])->map(function ($models) use ($foreign) {
-            return ModelAccessor::get(head($models), $foreign);
-        })->values()->unique();
     }
 }

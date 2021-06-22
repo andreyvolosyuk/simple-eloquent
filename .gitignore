@@ -2,3 +2,4 @@ vendor/
 .idea
 composer.lock
 .phpunit.result.cache
+simple-eloquent.iml

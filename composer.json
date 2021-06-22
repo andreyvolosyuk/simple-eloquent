@@ -11,9 +11,9 @@
   ],
   "require": {
     "php": "^7.2",
-    "illuminate/database": "^6.0|^7.30.4",
-    "illuminate/support": "^6.0|^7.30.4",
-    "illuminate/pagination": "^6.0|^7.30.4"
+    "illuminate/database": "^8.0",
+    "illuminate/support": "^8.0",
+    "illuminate/pagination": "^8.0"
   },
   "autoload": {
     "psr-4": {
@@ -30,7 +30,8 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "6.0.x-dev",
+      "dev-master": "8.0.x-dev",
+      "dev-seven": "7.0.x-dev",
       "dev-five_eight": "5.8.x-dev",
       "dev-five_seven": "5.7.x-dev",
       "dev-five_six": "5.6.x-dev",
