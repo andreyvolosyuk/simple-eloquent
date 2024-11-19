@@ -133,7 +133,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @param null $page
      * @return LengthAwarePaginatorInterface
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null, $total = null)
     {
         if ($this->isSimple()) {
             return $this->paginateSimple($perPage, $columns, $pageName, $page);
