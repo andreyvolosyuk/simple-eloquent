@@ -11,6 +11,7 @@ use Volosyuk\SimpleEloquent\Relations\HasRelationships;
  *
  * @package Volosyuk\SimpleEloquent
  * @authour Volosyuk Andrey <valasiuk.andrei@gmail.com>
+ * @mixin Builder
  */
 trait SimpleEloquent
 {
@@ -19,8 +20,8 @@ trait SimpleEloquent
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  Builder  $query
-     * @return Builder|static
+     * @param Builder $query
+     * @return Builder
      */
     public function newEloquentBuilder($query)
     {
@@ -28,10 +29,10 @@ trait SimpleEloquent
     }
 
     /**
-     * Get all of the models from the database.
+     * Get all of the models from the database (simple mode).
      *
      * @param  array|mixed  $columns
-     * @return Collection|stdClass[]|array
+     * @return Collection<int,stdClass|array>
      */
     public static function allSimple($columns = ['*'])
     {

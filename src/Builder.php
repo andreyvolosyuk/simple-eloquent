@@ -19,18 +19,19 @@ use Volosyuk\SimpleEloquent\Relations\Relation;
 /**
  * Class Builder
  * @package Volosyuk\SimpleEloquent
+ * @mixin Model
  */
 class Builder extends \Illuminate\Database\Eloquent\Builder
 {
     /**
      * @var bool
      */
-    protected $simple = false;
+    protected bool $simple = false;
 
     /**
      * @return $this
      */
-    public function simple()
+    public function simple(): self
     {
         $this->simple = true;
 
@@ -40,14 +41,14 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @return bool
      */
-    public function isSimple()
+    public function isSimple(): bool
     {
         return $this->simple === true;
     }
 
     /**
      * @param array $columns
-     * @return EloquentCollection|Collection|static[]
+     * @return EloquentCollection|Collection<int,Model|stdClass|array>
      */
     public function get($columns = ['*'])
     {
@@ -61,7 +62,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param mixed $id
      * @param array $columns
-     * @return Collection|stdClass|array|null
+     * @return Model|stdClass|array|Collection<int,Model|stdClass|array>|null
      */
     public function find($id, $columns = ['*'])
     {
@@ -75,7 +76,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param mixed $id
      * @param array $columns
-     * @return array|EloquentCollection|Model|Collection|stdClass
+     * @return Model|stdClass|array|Collection<int,Model|stdClass|array>
      */
     public function findOrFail($id, $columns = ['*'])
     {
@@ -88,7 +89,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 
     /**
      * @param array $columns
-     * @return array|Model|null|object|stdClass|static
+     * @return Model|stdClass|array|null
      */
     public function first($columns = ['*'])
     {
@@ -101,7 +102,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 
     /**
      * @param array $columns
-     * @return array|Model|stdClass|static
+     * @return Model|stdClass|array
      */
     public function firstOrFail($columns = ['*'])
     {
@@ -115,7 +116,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param array|Arrayable $ids
      * @param array $columns
-     * @return EloquentCollection|Collection
+     * @return EloquentCollection|Collection<int,Model|stdClass|array>
      */
     public function findMany($ids, $columns = ['*'])
     {
@@ -160,7 +161,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
 
     /**
      * @param array $columns
-     * @return Collection
+     * @return Collection<int,stdClass|array>
      */
     public function getSimple($columns = ['*'])
     {
@@ -178,7 +179,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
     /**
      * @param mixed $id
      * @param array $columns
-     * @return Collection|stdClass|array|null
+     * @return Collection<int,stdClass|array>|stdClass|array|null
      */
     public function findSimple($id, $columns = ['*'])
     {
@@ -199,6 +200,7 @@ class Builder extends \Illuminate\Database\Eloquent\Builder
      * @return stdClass|array|Collection
      *
      * @throws ModelNotFoundException
+     * @return Collection<int,stdClass|array>|stdClass|array
      */
     public function findSimpleOrFail($id, $columns = ['*'])
     {
